@@ -188,41 +188,67 @@
 \renewcommand{\formesphere}{}
 \renewcommand{\formecube}{}
 
-% Page de titre avec le logo du CHU à droite, aligné sur le bloc auteurs /
-% institution (pas sur la ligne du congrès), petit (fichier recadré au
-% contenu, l'original a des marges). \logotitre vide : pas de logo.
+% Page de titre avec le logo du CHU à droite, son haut aligné sur le haut des
+% noms d'auteurs, petit (fichier recadré au contenu, l'original a des marges).
+% \logotitre vide : pas de logo.
 \newcommand{\logotitre}{CHUNantes_logo_recadre.png}
 \newlength{\logotitrelargeur}\setlength{\logotitrelargeur}{1.7cm}
 % Pastille « JFR 2026 » extraite du modèle officiel (JFR2026-Template.pptx,
 % ppt/media/image3.png, 201 px, lettres blanches passées à l'indigo pour fond
-% clair) : sous le logo CHU, alignée à gauche sur lui, en face de la ligne du
-% congrès, de la même hauteur que le logo CHU (1,7 cm × 1797/2953 ≈ 1,03 cm).
+% clair) : sous le logo CHU, alignée à gauche sur lui, son haut sur le haut de la
+% ligne du congrès, de la même hauteur que le logo CHU (1,7 cm × 1797/2953 ≈ 1,03 cm).
 \newcommand{\logojfr}{JFR2026_logo.png}
 \newlength{\logojfrhauteur}\setlength{\logojfrhauteur}{1.03cm}
+% Page de titre : copie du gabarit « medical » du modèle avec un bloc de texte plus
+% large (\textwidth − 0,8 cm au lieu de 0.78 \textwidth, marges égales de 0,4 cm) pour que le
+% titre tienne sur deux lignes et le sous-titre sur une ;
+% le titre lui-même passe en \raggedright pour éviter la justification étirée.
+% \titrerepere{nom} : coordonnée tikz (remember picture) posée au haut des capitales de la
+% ligne courante, pour aligner les logos sur le texte quel que soit le nombre de lignes du titre.
+\newcommand{\titrerepere}[1]{%
+  \setlength{\@tempdima}{\fontcharht\font`A}%
+  \tikz[remember picture, overlay]\coordinate (#1) at (0,\@tempdima);}
+
+\defbeamertemplate*{title page}{jfr}{
+  \vspace{1.2cm}
+  \hspace{0.4cm}%
+  \begin{minipage}[t]{\dimexpr\textwidth-0.8cm\relax}   % 0,4 cm de chaque côté : le titre tient sur deux lignes
+    \raggedright
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+    \vspace{0.25cm}
+    {\lightfont\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \vspace{0.8cm}
+    {\color{WarmAmber}\rule{2.2cm}{1.5pt}\par}
+    \vspace{0.6cm}
+    {\mediumfont\usebeamercolor[fg]{author}\titrerepere{authtop}\insertauthor\par}
+    \vspace{0.1cm}
+    {\lightfont\small\usebeamercolor[fg]{institute}\insertinstitute\par}
+    \vspace{0.25cm}
+    {\lightfont\small\usebeamercolor[fg]{date}\titrerepere{datetop}\insertdate\par}
+  \end{minipage}}
+
 \renewcommand{\pagetitre}{{%
   \setbeamertemplate{footline}{}\fondbarre{\formesphere}
   \begin{frame}[plain]
     \titlepage
     \ifdefempty{\logotitre}{}{%
       \begin{tikzpicture}[remember picture, overlay]
-        \node[anchor=south east, inner sep=0pt]
-          at ([xshift=-0.8cm, yshift=1.5cm]current page.south east)
+        % haut du logo CHU sur le haut des noms, haut du logo JFR sur le haut de la ligne du congrès
+        \node[anchor=north east, inner sep=0pt]
+          at ([xshift=-0.8cm]current page.east |- authtop)
           {\includegraphics[width=\logotitrelargeur]{\logotitre}};
         \ifdefempty{\logojfr}{}{%
           \node[anchor=north west, inner sep=0pt]
-            at ([xshift=-0.8cm-\logotitrelargeur, yshift=1.5cm-0.1cm]current page.south east)
+            at ([xshift=-0.8cm-\logotitrelargeur]current page.east |- datetop)
             {\includegraphics[height=\logojfrhauteur]{\logojfr}};}
       \end{tikzpicture}}
   \end{frame}}}
 
-% Page de fin : \pagefin[image]{ligne de contact}
-% Fond : image plein cadre (frame fixe de la boucle de scopie du bruit, à
-% remplacer dans le PPTX par la vidéo MP4 en boucle ; la frame fixe sert de
-% secours). Panneau anthracite à gauche (40 % de la largeur, prolonge la barre
-% latérale) qui porte le texte en blanc : la zone vidéo reste vierge.
-% Tant que la vraie frame manque : figures/placeholder_boucle_bruit.png
-% (bruit synthétique, étiqueté comme emplacement réservé).
-\newcommand{\pagefin@panneau}{0.40}
+% Page de fin : \pagefin[image]{} — une trame de scopie plein cadre. Le texte
+% (« Merci de votre attention », contact) et le QR code sont des objets atténuants
+% rendus dans l'image par figures/fin_bruit_qr.py : rien n'est superposé ici.
+% Dans le PPTX, la vidéo figures/fin_bruit_qr.mp4 (même contenu) remplace l'image.
+% Le second argument est conservé pour la signature, il n'est plus affiché.
 \renewcommand{\pagefin}[2][]{{%
   \setbeamertemplate{footline}{}%
   \setbeamertemplate{background canvas}{%
@@ -235,23 +261,12 @@
           \node[anchor=center, inner sep=0pt] at (0.5,0.5)
             {\includegraphics[width=\paperwidth]{#1}};
         \end{scope}
-        \IfSubStr{#1}{placeholder}{%
-          \node[anchor=south east, inner sep=0pt, text=SoftWhite, font=\tiny, align=right, text width=0.5\paperwidth]
-            at (0.97,0.05) {emplacement réservé : boucle de scopie du bruit (disque Cu sur PMMA, basse dose, cadence réelle), vidéo MP4 posée en fond dans le PPTX, cette image fixe en secours};
-        }{}%
       }%
-      \fill[Slate] (0,0) rectangle (\pagefin@panneau,1);
     \end{tikzpicture}}%
   \begin{frame}[plain]
-    \begin{tikzpicture}[remember picture, overlay]
-      \node[anchor=west, inner sep=0pt, text width=0.32\paperwidth, align=left]
-        at ([xshift=0.06\paperwidth]current page.west) {%
-          \raggedright\hyphenpenalty=10000
-          {\color{SoftWhite}\LARGE\bfseries Merci de votre attention\par}
-          \vspace{0.35cm}
-          {\lightfont\color{StoneLight}\small #2\par}
-          \vspace{0.6cm}{\color{WarmAmber}\rule{2.2cm}{1.5pt}}};
-    \end{tikzpicture}
+    % Le texte (« Merci de votre attention », contact) et le QR code sont des objets
+    % atténuants rendus dans l'image elle-même (figures/fin_bruit_qr.py) : rien n'est
+    % écrit par-dessus. L'argument #2 est conservé pour la signature de la macro.
   \end{frame}}}
 
 % ----------------------------------------------------------------------------

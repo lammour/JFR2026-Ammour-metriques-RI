@@ -8,9 +8,10 @@ Sous-titre : *Du bruit au mouvement : mettre le temps dans la qualité image.*
 ## Contenu
 
 - `JFR2026_Ammour_metriques_RI.pdf` : les diapositives présentées.
+- `JFR2026_Ammour_metriques_RI.pptx` : la version projetée (une image par diapositive, vidéo de la boucle de scopie sur la dernière), produite par `make_pptx.py`.
 - `src/` : sources LaTeX (Beamer, LuaLaTeX). `jfr2026.tex` contient les diapositives, `jfr2026.sty` les macros propres à l'exposé, `commun/` le modèle de présentation et les polices (Poppins, Inter, Noto Sans Math, licence OFL).
 - `references.bib` : bibliographie biblatex. Les champs `note` sont des fiches de lecture de travail.
-- `figures/` : figures des diapositives. Les figures `beta_icono`, `disque_icono`, `mobile_icono` et `nps_icono` sont issues des mesures faites au CHU de Nantes sur un Siemens Artis Icono le 6 octobre 2026 (méthode de Konst et al. 2021). `nema_roue_lag.png`, `disque_monnin.png` et `dqe_friedman.png` sont reproduites de publications citées sur les diapositives (AAPM TG-272, Monnin et al. 2021, Friedman et Cunningham 2010) et restent la propriété de leurs auteurs et éditeurs.
+- `figures/` : figures des diapositives. Les figures `beta_icono`, `disque_icono`, `mobile_icono` et `nps_icono` sont issues des mesures faites au CHU de Nantes sur un Siemens Artis Icono le 6 octobre 2026 (méthode de Konst et al. 2021). `fin_bruit_qr.png` et `fin_bruit_qr.mp4` sont une trame et une boucle réelles de la même session, avec un QR code vers ce dépôt en objet-test. `nema_roue_lag.png`, `disque_monnin.png` et `dqe_friedman.png` sont reproduites de publications citées sur les diapositives (AAPM TG-272, Monnin et al. 2021, Friedman et Cunningham 2010) et restent la propriété de leurs auteurs et éditeurs.
 
 ## Compilation
 
