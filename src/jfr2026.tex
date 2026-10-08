@@ -29,6 +29,7 @@
 
 % --------------------------- DIAPO 1 · TITRE (0:00 → 0:20) ------------------
 \pagetitre
+\note{Merci. Je vais vous parler de ce que nous mesurons aujourd'hui pour qualifier une image d'interventionnel, de ce que ces mesures ne voient pas, et de ce que nous devrions mesurer. J'irai vite sur la physique et je vous montrerai des images acquises à Nantes.}
 
 % ============================================================================
 \section{État des lieux}
@@ -41,8 +42,9 @@
     \item \textbf{Le traitement constructeur fait l'image :} filtres temporels et rehaussement non linéaire, opaques, pilotés par la dose.
   \end{itemize}
   \vspace{0.2cm}
-  {\color{Sage}\bfseries Anthony et al. 2022\srcref{anthony2022} :} deux salles comparables en débit de kerma et en résolution, deux traitements opposés, lissage spatial et \highlight{SNR $\times$ 4} d'un côté, rehaussement de contours et \highlight{contraste $+$88\,\%} de l'autre.
+  {\color{Sage}\bfseries Anthony et al. 2022\srcref{anthony2022} :} deux salles comparables en débit de kerma et en résolution limite, deux traitements opposés, lissage spatial et \highlight{efficacité SNR $\times$ 4} d'un côté, rehaussement de contours et \highlight{MTF à 50\,\% $\times$ 1,5} de l'autre.
   \src{anthony2022}
+  \note{Trois choses distinguent l'interventionnel. D'abord la dose : sur des procédures longues, on atteint le seuil des effets déterministes, la qualité d'image n'est donc pas un luxe, c'est la contrepartie d'une dose qu'on ne peut pas augmenter. Ensuite l'image est un flux : ce que le radiologue regarde, c'est une séquence à 7,5 ou 15 images par seconde, avec un cathéter qui bouge ; l'image isolée n'est pas l'objet clinique. Enfin, depuis plus de dix ans, c'est le traitement constructeur qui fait l'image. Anthony et ses collègues ont comparé deux salles qui délivrent un débit de dose comparable : Siemens combine un filtre temporel léger et un lissage spatial agressif, Philips un filtre temporel un peu plus marqué et un rehaussement de contours. Les images sont visiblement différentes. Leur résolution limite et leur résolution spatio-temporelle sont pourtant comparables, et les auteurs le disent eux-mêmes : leurs métriques d'efficacité de dose, calculées sur images traitées, ne caractérisent pas complètement ces systèmes. C'est tout le problème.}
 \end{frame}
 
 % --------------------------- DIAPO 3 (1:30 → 3:00) --------------------------
@@ -64,6 +66,7 @@
   \end{center}
   \vspace{-0.2cm}
   \src{iec2008,ansm2016,lin2022,efomp2024,bath2007}
+  \note{Voilà ce que nous avons dans la boîte à outils. Côté constructeur, la DQE selon la norme IEC : c'est une excellente métrique, mais elle est mesurée sur des images brutes, offset, gain et pixels défectueux corrigés, rien d'autre, avec un faisceau RQA en laboratoire, sans grille ni diffusé. Et dans le cas dynamique c'est une DQE par frame, où le lag est mesuré pour être retiré de la NPS, pas pour être rapporté. Côté recette, le rapport TG-272 de l'AAPM et le protocole EFOMP de 2024 : résolution, bas contraste sur objets-tests, uniformité, et pour le mouvement une roue tournante lue à l'œil ; le rapport écrit lui-même qu'il est « prématuré » de proposer un test pour les systèmes optimisés en CNR, faute de méthode et de fantôme (§ 2.3.5). L'EFOMP a fait un pas important en introduisant des observateurs mathématiques, appliqués frame par frame, et un facteur de lag dans son SNR² par seconde. Mais le seul objet réellement mobile normalisé reste la roue à rayons NEMA, dont la lecture est qualitative. Côté clinique enfin, le visual grading et les études de lecteurs : c'est ce qui compte vraiment, mais c'est coûteux, peu reproductible, et cela arrive après l'achat. Retenez la ligne du bas : tout ce que nous mesurons est soit statique, soit mesuré avant le traitement, soit subjectif. Si le temps presse : 60 s en sautant la colonne clinique.}
 \end{frame}
 
 % --------------------------- DIAPO 4 (3:00 → 4:00) --------------------------
@@ -79,6 +82,7 @@
     \item \textbf{Non-linéarité} : la réponse dépend du contraste et de la dose, il n'y a plus \emph{une} MTF\srcref{monnin2021}.
   \end{itemize}
   \src{konst2021,monnin2021}
+  \note{Trois phénomènes échappent aux mesures statiques. La rémanence, celle du détecteur, qui garde une trace des frames précédentes, ou celle du traitement : ce que vous voyez ici sur la roue NEMA qui se dédouble quand l'intégration temporelle augmente. Le filtre récursif : l'image affichée est un mélange pondéré de la frame courante et de l'image précédente ; on gagne beaucoup en bruit, on perd en netteté du mouvement, et le coefficient de mélange est rarement documenté, jamais sous une forme comparable d'une marque à l'autre (K-factor Siemens, TNRT Philips, propriétaire GE ; sur un Artis Q, Villa 2026 doit estimer les modes automatiques par trois méthodes). Et la non-linéarité des traitements récents : leur réponse dépend du contraste et de la dose, il n'y a plus une MTF. Le point commun : ces trois effets sont temporels ou non linéaires. Une DQE statique sur image brute est aveugle aux trois.}
 \end{frame}
 
 % ============================================================================
@@ -111,6 +115,7 @@
     \end{column}
   \end{columns}
   \src{konst2021}
+  \note{On peut mesurer ce filtre. Konst et ses collègues ont montré en 2021 qu'il suffit de trois images d'un fantôme uniforme : deux frames consécutives, une frame éloignée. Le filtre corrèle le bruit des frames voisines ; l'image différence annule ce bruit corrélé, l'image somme l'amplifie ; le ratio des deux variances donne directement le coefficient du filtre, la frame éloignée servant à retirer le bruit de structure fixe du détecteur. Exactitude de l'ordre du pour cent, sur quatre arceaux mobiles (GE, Philips, Siemens et Ziehm), avec des coefficients qui vont de « pas de filtre » à une moyenne effective sur treize images, et qui, chez certains constructeurs, changent avec la dose. Voici ce que nous avons mesuré à Nantes [décrire : sur telle salle, β passe de … en scopie haute dose à … en basse dose, soit un moyennage sur … à … frames]. [Si confirmé :] Autrement dit, quand on baisse la dose, ce système ne baisse pas la qualité apparente : il moyenne davantage dans le temps, et la traînée derrière un cathéter s'allonge. [Sinon : Anthony 2022 montre qu'un constructeur peut au contraire garder un filtre temporel léger et lisser dans l'espace.] Dans les deux cas, c'est invisible dans une DQE, trompeur dans un TO.10, et absent du rapport de recette. Trois images suffisent à le rendre visible. Si un physicien demande « et les modes automatiques ? » : Villa 2026, Artis Q, le K mesuré sur fond uniforme dépasse le K déduit d'un objet mobile, le filtre se désactive localement autour du mouvement ; d'où le mot « minorant ».}
 \end{frame}
 
 % --------------------------- DIAPO 5 bis : résultats CHU Nantes ---------------
@@ -121,7 +126,7 @@
   \raggedright
   \small
   \begin{itemize}
-    \item \textbf{Rapport des lags} (non publié) : même principe que Konst\srcref{konst2021} avec une trame de plus pour éliminer le bruit non filtré, $1-\rho(2)/\rho(1)$.
+    \item \textbf{Rapport des lags} (non publié) : même principe que Konst\srcref{konst2021} avec une trame de plus pour éliminer le bruit non filtré.
     \item \textbf{$K$ manuels} : retrouvés de 1 à 32, répétabilité 0,4\,\%.
     \item \textbf{Protocoles cliniques} : \highlight{$K = 3{,}9$} partout, le filtrage ne dépend pas de la dose.
   \end{itemize}
@@ -142,7 +147,7 @@
     \begin{column}{0.49\textwidth}
       \small
       \begin{itemize}
-        \item \textbf{Objet immobile}, même dose : CNR de 0,34 à 0,91, soit $\times\,2{,}6$, exactement $\sqrt{2K-1}$\srcref{konst2021}.
+        \item \textbf{Objet immobile}, même dose : CNR de 0,34 à 0,91, soit $\times\,2{,}6$ ($\sqrt{2K-1}$\srcref{konst2021}).
       \end{itemize}
       \vspace{0.05cm}
       Plus on filtre, meilleur est le CNR statique : la métrique récompense \highlight{ce qui dégrade le mouvement}.
@@ -152,6 +157,7 @@
     \end{column}
   \end{columns}
   \src{konst2021,villa2026}
+  \note{Voici le piège. Un disque de cuivre immobile, le même que celui de Monnin, en scopie basse et haute dose. Le CNR mesuré sur la frame affichée est [meilleur / à peine dégradé] en basse dose : le filtre a compensé. Une recette sur objet statique conclurait que tout va bien. Mais regardez la même série dans le temps : la part d'information réellement nouvelle à chaque frame [la bande passante temporelle / l'image différence] s'est effondrée. Le CNR statique récompense exactement ce qui abîme la visibilité d'un guide en mouvement. C'est pour cela qu'il nous faut des métriques qui portent la dimension temporelle. Rappel physique : en régime établi le CNR de la frame affichée monte d'un facteur racine de (2−β)/β, soit ×4,9 pour β = 0,08.}
 \end{frame}
 
 % ============================================================================
@@ -181,6 +187,7 @@
     \end{column}
   \end{columns}
   \src{friedman2010,friedman2008,siewerdsen2002}
+  \note{Le cadre théorique existe depuis plus de quinze ans. Cunningham, puis Friedman et Cunningham, ont écrit la DQE avec une troisième dimension, la fréquence temporelle. À fréquence temporelle nulle, c'est en première approximation la DQE que tout le monde connaît ; quand la fréquence temporelle monte, la DQE chute, d'environ 50 \% à 15 hertz sur leur banc, un amplificateur de brillance en scopie continue, sans traitement. Cette chute, c'est le repliement temporel du bruit : une dégradation qu'aucune mesure statique ne voyait. Mais Friedman le dit lui-même : un filtre temporel linéaire atténue le signal et le bruit de la même façon, et ne change pas cette DQE. Elle voit le lag et le repliement ; elle est aveugle au filtre. Et elle a deux autres limites, instructives. Elle suppose un système linéaire, donc elle a été mesurée sans traitement constructeur. Et une DQE tridimensionnelle décrit la chaîne, pas ce qu'on voit dans une frame. MTF temporelle par bord incliné mobile (Friedman 2008), NPS 3D par FFT d'une pile de frames (Siewerdsen 2002).}
 \end{frame}
 
 % --------------------------- DIAPO 8 (7:50 → 9:00) --------------------------
@@ -206,6 +213,7 @@
     \textbf{La DQE de trame est} \highlight{invariante au filtre temporel} : le compromis bruit / mouvement se lit à part, dans la \textbf{MTF temporelle}.
   }
   \src{monnin2021}
+  \note{Monnin et ses collègues, à Lausanne, ont répondu aux deux limites. Pour la linéarité : un disque de cuivre de faible contraste, pour lequel le traitement constructeur se comporte approximativement comme un système linéaire ; on peut donc mesurer traitement activé, grille et fantôme diffusant en place. Pour le lien avec la frame : ils intègrent séparément le signal et le bruit sur la bande temporelle et obtiennent une DQE de frame : 0,65 pour deux systèmes Siemens (Cios Fusion, Artis Zee) à vingt centimètres d'eau, moins sur les faibles épaisseurs à cause de la grille. Et voici le point intéressant : cette DQE ne bouge pratiquement pas quand on change le filtre temporel, parce que le filtre atténue le signal et le bruit de la même façon. Ce qui bouge, c'est la MTF temporelle. Autrement dit, même une DQE spatio-temporelle ne dit pas à elle seule ce que fait le filtre ; il faut lire les deux. C'est, à ma connaissance, la seule DQE de la chaîne complète, post-traitement compris. Elle n'est ni dans TG-272 ni dans l'EFOMP. C'est la mesure que nous n'avons pas encore à Nantes, faute de fantôme mobile fiable. Attention : la formule de la diapo 25 du webinaire est le NEQ de frame (éq. 22), pas la DQE de frame (éq. 23).}
 \end{frame}
 
 % --------------------------- DIAPO 9 (9:00 → 10:00) -------------------------
@@ -229,6 +237,7 @@
   \centering
   Il manque \highlight{une tâche clinique} définie avec les radiologues.
   \src{tapiovaara2004,samei2019,ingraito2023,viry2023}
+  \note{Dernière marche : la tâche. L'ICRU le dit depuis 1996, la qualité d'image n'a de sens que par rapport à une tâche : voir un guide de 0,014 pouce qui bouge, pas un disque immobile. Les observateurs mathématiques permettent de calculer un indice de détectabilité, reproductible, là où la lecture visuelle d'un objet-test, Tapiovaara l'a montré, ne l'est pas. Le scanner a fait ce basculement il y a quelques années avec le TG-233, précisément parce que la reconstruction itérative avait cassé le cadre linéaire. En interventionnel, tout existe : des observateurs spatio-temporels sur cibles mobiles à Monza, des observateurs de Hotelling sur fonds anthropomorphes avec objets mobiles à la Mayo, et l'EFOMP a déjà mis un observateur mathématique, frame par frame, dans son protocole 2024. Il manque la cible mobile et le lien avec une tâche clinique définie par vous, les radiologues. Dire « détectabilité » plutôt que d′ ; ne prononcer « Hotelling » qu'une fois. Si le temps presse : 40 s, garder seulement la colonne de droite.}
 \end{frame}
 
 % ============================================================================
@@ -252,6 +261,7 @@
     \end{itemize}
   }
   \src{madoff2026,assar2026,zhao2026,solomon2020,poludniowski2026}
+  \note{Et pourquoi maintenant. Les débruiteurs par apprentissage profond arrivent en salle : Optiq AI chez Siemens (préprint, non relu par les pairs), SmartIQ chez Philips, et une angiographie soustraite générative qui divise la dose par trois dans un essai randomisé publié dans Nature Medicine. Toutes ces études sont cliniques, avec des lecteurs ; aucune ne publie de métrique physique de la chaîne. Or on sait du scanner que ces algorithmes ont une MTF qui dépend du contraste et de la dose, et qu'un observateur calculé en Fourier surestime le bénéfice du débruitage. Un algorithme qui a appris à quoi ressemble un guide peut en dessiner un. La protection la plus directe est une tâche, mesurée sur la chaîne complète, avec des cibles qui bougent. Prudence : dire « une DSA générative », « réduction de dose des deux tiers dans un essai randomisé », ne pas dire « synthétique ».}
 \end{frame}
 
 % --------------------------- DIAPO 11 (11:00 → 12:00) -----------------------
@@ -264,6 +274,7 @@
   \vspace{0.4cm}
   \centering
   \highlight{Une DQE ne dit pas ce que vous voyez.}
+  \note{Trois leviers. Dès demain : mesurer le coefficient du filtre temporel à la recette, trois images, quelques minutes par protocole, et l'écrire dans le rapport à côté de la dose. Ensuite : porter la NPS temporelle, la MTF temporelle et le NEQ de frame dans les protocoles (le NEQ ne demande pas la mesure du diffusé, la DQE de frame si). Enfin, avec vous : définir deux ou trois tâches cliniques de référence et un observateur commun, et les exiger pour tout algorithme d'IA. Une DQE ne dit pas ce que vous voyez. Mesurez le temps, mesurez la chaîne complète, mesurez la tâche. Merci.}
 \end{frame}
 
 % ============================================================================
