@@ -1,0 +1,756 @@
+% =====================================================================
+% references.bib — JFR 2026
+% "Évaluation objective de la qualité d'image en radiologie
+%  interventionnelle : quelles métriques ?"  — Luis Ammour, CHU Nantes
+%
+% Clés : auteurANNÉE (minuscules). Le champ `note` dit à quoi sert la
+% référence dans l'exposé. Toutes les entrées avec DOI ont été vérifiées
+% (Crossref / éditeur / OpenAlex) le 24/09/2026. Les normes et rapports
+% sans DOI sont cités par organisme + URL.
+%
+% Sections :
+%   1. Contexte clinique et dose
+%   2. Physique de la chaîne dynamique (lag, filtre récursif)
+%   3. Métriques actuelles : normes, protocoles, objets-tests
+%   4. Métriques actuelles : limites du visuel, figures de mérite
+%   5. Cadre Fourier spatio-temporel (MTF_t, NPS 3D, DQE spatio-temporelle)
+%   6. Métriques task-based : observateurs mathématiques, d'
+%   7. Traitements non linéaires et débruitage par IA
+%   8. Comptage photonique
+% =====================================================================
+
+
+% ---------------------------------------------------------------------
+% 1. Contexte clinique et dose
+% ---------------------------------------------------------------------
+
+@article{balter2010,
+  author  = {Balter, Stephen and Hopewell, John W. and Miller, Donald L. and Wagner, Louis K. and Zelefsky, Michael J.},
+  title   = {Fluoroscopically Guided Interventional Procedures: A Review of Radiation Effects on Patients' Skin and Hair},
+  journal = {Radiology},
+  year    = {2010},
+  volume  = {254},
+  number  = {2},
+  pages   = {326--341},
+  doi     = {10.1148/radiol.2542082312},
+  note    = {Accroche : effets déterministes cutanés en interventionnel, d'où l'enjeu dose/qualité.}
+}
+
+@article{hill2018,
+  author  = {Hill, Kevin D. and Mann, Steve D. and Carboni, Michael P. and Doyle, Thomas P. and Idriss, Salim F. and Janssen, Dana F. and Nicholson, George T. and Sathanandam, Shyam and Fleming, Greg A.},
+  title   = {Variability in radiation dose and image quality: A comparison across fluoroscopy-system vendors, generations of equipment and institutions},
+  journal = {Catheterization and Cardiovascular Interventions},
+  year    = {2018},
+  volume  = {92},
+  number  = {7},
+  doi     = {10.1002/ccd.27793},
+  note    = {Les indicateurs de dose seuls ne classent pas les systèmes ; variabilité inter-constructeurs et inter-générations.}
+}
+
+@article{trunz2021,
+  author  = {Trunz, Lukas M. and Eschelman, David J. and Gonsalves, Carin F. and Adamo, Robert D. and Dave, Jaydev K.},
+  title   = {Investigation of radiation dose estimates and image quality between commercially available interventional fluoroscopy systems for fluoroscopically guided interventional procedures},
+  journal = {Academic Radiology},
+  year    = {2021},
+  volume  = {28},
+  number  = {11},
+  pages   = {1559--1569},
+  doi     = {10.1016/j.acra.2020.02.024},
+  note    = {Allura ClarityIQ (Philips) vs Artis Q (Siemens), 4381 procédures : kerma cumulé plus bas de 29--58 \% selon la procédure sur ClarityIQ, KAP de 37 et 44 \% pour deux procédures ; sous-groupe apparié de 40 patients : CAK -45 \%, KAP -31 \% ; qualité subjective (2 lecteurs, échelle 5 points) en faveur de ClarityIQ. Fantôme d'acrylique utilisé uniquement pour les débits de kerma. La dose ne suffit pas.}
+}
+
+@article{anthony2022,
+  author  = {Anthony, Gregory and Liang, Yun and Zhao, Xuandong},
+  title   = {Performance evaluation of two interventional fluoroscope suites for cardiovascular imaging},
+  journal = {Journal of Applied Clinical Medical Physics},
+  year    = {2022},
+  volume  = {23},
+  number  = {10},
+  pages   = {e13741},
+  doi     = {10.1002/acm2.13741},
+  note    = {Artis Q (CARE+CLEAR) vs Azurion (ClarityIQ), 7,5 i/s : débit de kerma comparable, résolution limite et spatio-temporelle comparables ; alpha cinématique 0,829 (Artis Q) vs 0,704 (Azurion) ; efficacité de dose SNR x4 (436 \%) et efficacité CNR +65 \% pour l'Artis Q ; contraste +88 \% pour l'Azurion. Ne mesure PAS de DQE. « In the strictest sense, dose efficiency metrics for SNR and CNR apply to raw, unprocessed images » ; « they do not completely characterize these systems ».}
+}
+
+@article{nocetti2023,
+  author  = {Nocetti, Diego and Villalobos, Kathia and Wunderle, Kevin},
+  title   = {Physical image quality metrics for the characterization of {X}-ray systems used in fluoroscopy-guided pediatric cardiac interventional procedures: A systematic review},
+  journal = {Children},
+  year    = {2023},
+  volume  = {10},
+  number  = {11},
+  pages   = {1784},
+  doi     = {10.3390/children10111784},
+  note    = {Revue systématique : inventaire des métriques physiques réellement utilisées pour caractériser les systèmes interventionnels.}
+}
+
+@article{zucca2026,
+  author  = {Zucca, Sergio and Serra, Giacomo and Cavallari, M{\^o}nica Regina and Postiglione, Francesca and Mazzocchi, Silvia and Pini, S. and delle Canne, Stefania and D'Alessio, Daniele and Iorillo, Marco and Turano, Piera and Fracassi, Antonietta and Rampado, Osvaldo and Lo Moro, Giulia and Gianusso, Laura and Balsamo, Anna and Coniglio, Angela Daniela and Grande, Sveva and Palma, Alessandra and Rosi, Antonella and D'Ercole, Loredana},
+  title   = {Technical image quality assessment as a tool for clinical audit in interventional radiology: first results of a {National MoH Project}},
+  journal = {Physica Medica},
+  year    = {2026},
+  volume  = {142},
+  pages   = {105732},
+  doi     = {10.1016/j.ejmp.2026.105732},
+  note    = {Projet national italien : la qualité d'image technique comme outil d'audit clinique en RI. Montre la demande institutionnelle de métriques objectives.}
+}
+
+
+% ---------------------------------------------------------------------
+% 2. Physique de la chaîne dynamique
+% ---------------------------------------------------------------------
+
+@article{siewerdsen1999,
+  author  = {Siewerdsen, J. H. and Jaffray, D. A.},
+  title   = {A ghost story: Spatio-temporal response characteristics of an indirect-detection flat-panel imager},
+  journal = {Medical Physics},
+  year    = {1999},
+  volume  = {26},
+  number  = {8},
+  pages   = {1624--1641},
+  doi     = {10.1118/1.598657},
+  note    = {Lag et rémanence (ghosting) des capteurs plans a-Si : première rupture physique.}
+}
+
+@article{konst2021,
+  author  = {Konst, Bente and N{\o}tthellen, Jacob and N{\ae}ss, Stine Nalum and B{\aa}th, Magnus},
+  title   = {Novel method to determine recursive filtration and noise reduction in fluoroscopic imaging -- a comparison of four different vendors},
+  journal = {Journal of Applied Clinical Medical Physics},
+  year    = {2021},
+  volume  = {22},
+  number  = {1},
+  pages   = {281--292},
+  doi     = {10.1002/acm2.13115},
+  note    = {Mesure de beta = 1/K (I(n) = beta S(n) + (1-beta) I(n-1), « forget factor ») par ratio de variances somme/différence sur trois images d'une série (PMMA 20 cm, gap 6 cm, séries 8--10 s ; B, C = 4e et 5e avant la fin, A au milieu, LIH exclue). Quatre arceaux mobiles (GE OEC Elite, Philips Zenition 70, Siemens Cios Alpha, Ziehm Vision RFD). Écart au nominal 0,31--1,08 \%, CV 0,58--1,48 \%. K mesurés de 1,0 à 13 ; réduction de bruit mesurée environ 0,4--0,7, inférieure à la théorie à cause du bruit de structure fixe non filtré (exception GE cine). GE réduit K quand la dose monte, Philips non ; GE et Philips augmentent K avec la cadence ; tous réduisent le filtrage appliqué à basse cadence et fort K. Beta ne distingue pas lag détecteur et filtre. Base de la manip proposée.}
+}
+
+@article{villa2026,
+  author  = {Villa, Raffaele and Paruccini, Nicoletta and De Ponti, Elena},
+  title   = {Multiparametric Characterisation of a Recursive Filtration Algorithm on a Commercial Angiographic Equipment},
+  journal = {Journal of Imaging Informatics in Medicine},
+  year    = {2026},
+  doi     = {10.1007/s10278-026-02103-x},
+  note    = {Published online 7 July 2026. Artis Q biplan (Monza), 7,5 i/s, grille, fantôme rotatif 30 tr/min (disques Pb 2--5 mm, fils acier 0,2/0,6 mm). Méthode de Konst (K\_noise) : K manuels 1--8 retrouvés à 8 \% près. Modes automatiques Auto 1--8 : K\_noise 1,2--3,2 sur fond uniforme, mais K cinématique (décroissance du contraste derrière l'objet mobile) 1,0--2,7, écarts jusqu'à -66 \%, décroissance en exponentielle étirée (0,24--0,78) pour 6 modes sur 8 : filtre adaptatif au mouvement. NPS temporelle : passe-bas propre pour K manuel, remontée haute fréquence pour certains modes auto. Premières 50 frames exclues.}
+}
+
+
+% ---------------------------------------------------------------------
+% 3. Métriques actuelles : normes, protocoles, objets-tests
+% ---------------------------------------------------------------------
+
+@techreport{iec2015,
+  author      = {{International Electrotechnical Commission}},
+  title       = {Medical electrical equipment -- Characteristics of digital {X}-ray imaging devices -- Part 1-1: Determination of the detective quantum efficiency -- Detectors used in radiographic imaging},
+  number      = {IEC 62220-1-1:2015},
+  institution = {International Electrotechnical Commission},
+  address     = {Geneva},
+  year        = {2015},
+  note        = {Norme DQE radiographique (statique) : la référence constructeur.}
+}
+
+@techreport{iec2008,
+  author      = {{International Electrotechnical Commission}},
+  title       = {Medical electrical equipment -- Characteristics of digital {X}-ray imaging devices -- Part 1-3: Determination of the detective quantum efficiency -- Detectors used in dynamic imaging},
+  number      = {IEC 62220-1-3:2008},
+  institution = {International Electrotechnical Commission},
+  address     = {Geneva},
+  year        = {2008},
+  url         = {https://webstore.iec.ch/en/publication/6599},
+  note        = {Norme DQE « dynamique » (texte vérifié le 07/10/2026, édition EN 2009 dans bibliographie/). Clause 5 : seules corrections admises sur les RAW DATA, « linear and image-independent » : pixels défectueux, flat-field (non-uniformité du champ, offset, gain), distorsion géométrique ; tout traitement dépendant de l'image est exclu. Le lag n'est pas ignoré mais corrigé : 4.6.3 « LAG EFFECTS will be separately determined and the estimated NPS will be corrected for these effects » ; 6.3.2.2 : facteur r = rapport des intégrales de la PSD temporelle du bruit quantique (périodogramme pixel par pixel sur la séquence) à la PSD blanche ; 6.3.2.3 : seule la part quantique de la NPS est divisée par r. La DQE reste donc une DQE 2D par frame ramenée au bruit non corrélé, sans MTF ni DQE temporelle. Clause 7 : la déclaration de conformité porte sur la DQE (0,5 ; 1 ; 1,5 mm\textsuperscript{-1}… jusqu'à Nyquist) avec qualité de faisceau, kerma, cadence et facteur r ; la MTF et la NPS sont des intermédiaires (6.3.3, 6.3.2), non déclarées. Incertitude exigée : ± 0,06 ou ± 10 \%. Toujours en édition 1.0.}
+}
+
+@techreport{ansm2016,
+  author      = {{Agence nationale de sécurité du médicament et des produits de santé}},
+  title       = {Décision du 21 novembre 2016 fixant les modalités du contrôle de qualité des installations de radiodiagnostic utilisées pour des procédures interventionnelles radioguidées, et son guide d'application},
+  number      = {Compilation version 7 du 4 août 2026},
+  institution = {ANSM},
+  address     = {Saint-Denis},
+  year        = {2016},
+  url         = {https://ansm.sante.fr},
+  note        = {Texte réglementaire français du CQ en radiologie interventionnelle (texte vérifié le 07/10/2026, compilation v7 dans bibliographie/). En vigueur depuis le 31 mars 2017. Qualité image (test 6.3) : deux tests seulement, résolution à bas contraste (objet-test 18 disques de 8 mm sous 1 mm Cu, critère 9/7/8 disques selon le type, lecture visuelle à 3 diamètres d'écran, sur la dernière image mémorisée) et résolution spatiale (mire de plomb à 45°, 2,24 à 1,12 pl/mm selon le champ, dernier groupe distinguable à l'œil pendant l'exposition). Aucune mesure de MTF, NPS, DQE, ni de test sur objet mobile ni de lag. Le filtre récursif est connu du texte : 6.3.3 demande que « le nombre d'images utilisé en mode coulissant, en cas d'application d'un filtrage du bruit de type récursif, ne doit pas dépasser celui utilisé en routine », sans le mesurer. Protocoles d'acquisition et d'affichage « ceux utilisés en routine », donc images traitées. Constance : kerma, PKS, mA, kV à 25/25/20/10 \%. Débit max 100 mGy/min scopie standard, 200 haut débit.}
+}
+
+@techreport{nema2000,
+  author      = {{National Electrical Manufacturers Association}},
+  title       = {Characteristics of and Test Procedures for a Phantom to Benchmark Cardiac Fluoroscopic and Fluorographic Performance},
+  number      = {NEMA Standards Publication XR 21-2000},
+  institution = {National Electrical Manufacturers Association},
+  address     = {Rosslyn, VA},
+  year        = {2000},
+  url         = {https://dicom.nema.org/SCAI-NEMA/XR21FINA.PDF},
+  note        = {Seul élément dynamique normalisé : la roue à rayons (rotating spoke wheel), lecture qualitative.}
+}
+
+@article{lin2022,
+  author  = {Lin, Pei-Jan P. and Goode, Allen R. and Corwin, Frank D. and Fisher, Ryan F. and Balter, Stephen and Wunderle, Kevin A. and Schueler, Beth A. and Kim, Don-Soo and Zhang, Jie and Zhou, Yifang and Jenkins, Peter A. and Mahmood, Usman and Lin, Teh and Zhao, Hui and Park, Mi-Ae and Trianni, Annalisa and Lendl, Markus and Kuhls-Gilcrist, Andrew and Jans, Jan C. and Desponds, Lionel and Banasiak, Gene and Backes, Steven and Snyder, Carl and Snyder, Angela and Lu, Minghui and Gonzalez, Scott},
+  title   = {{AAPM} Task Group Report 272: Comprehensive acceptance testing and evaluation of fluoroscopy imaging systems},
+  journal = {Medical Physics},
+  year    = {2022},
+  volume  = {49},
+  number  = {4},
+  pages   = {e1--e49},
+  doi     = {10.1002/mp.15429},
+  note    = {Recette AAPM des systèmes de scopie (texte vérifié). Aucun test MTF/NPS/DQE. Lag et mouvement : roue NEMA ou fantôme rotatif, « qualitative assessment » seulement ; « tests of motion may also assess the degree of frame averaging ». SNR/CNR jugés difficiles sur images traitées (« requires access beyond that of the basic user level »). Section 2.3.5 : « There is no established procedure to properly evaluate the relationship of FPIR input dose (and input dose rate) to image quality on CNR optimized fluoroscopy systems, nor is there a suitable phantom available on the commercial market for image quality assessment. It is therefore premature, at this time, for TG 272 to address any specific test procedure for evaluation of CNR-optimized fluoroscopy systems. » Les images de la roue NEMA du webinaire sont sa figure 17 (7,5 pps, 3,4 ms). Référence « état des lieux ».}
+}
+
+@techreport{gauntt2024,
+  author      = {Gauntt, David M. and Ranger, Nicole T. and Willis, Charles E. and Al-Senan, Rani and Bercha, Ishtiaq Hussain and Dave, Jaydev K. and Fang, Yuan and Gingold, Eric L. and Goldman, Lee W. and Jones, A. Kyle and Peck, Donald J. and Ranallo, Frank N. and Rutel, Isaac B. and Schueler, Beth A. and Uzenoff, Robert A. and Walz-Flannigan, Alisa I. and Weiser, John C. and Yorkston, John and Apgar, Bruce and Meyer, Stephen W.},
+  title       = {Acceptance Testing and Quality Control of Digital Radiographic Imaging Systems: Report of {AAPM} Task Group 150},
+  institution = {American Association of Physicists in Medicine},
+  number      = {AAPM Report No. 150},
+  year        = {2024},
+  doi         = {10.37206/202},
+  note        = {Recette/CQ des systèmes DR : MTF, NPS, DQE, uniformité. Le pendant radiographique de TG-272.}
+}
+
+@techreport{efomp2024,
+  author      = {Trianni, Annalisa and Rogers, Andy and Bertolini, Marco and Bosmans, Hilde and Marshall, Nicholas and Paruccini, Nicoletta and Sandborg, Michael and Schegerer, Alexander and Sukupova, Lucie and Trevisan, Diego},
+  title       = {{EFOMP} Protocol: Quality Control of Dynamic X-Ray Imaging Systems},
+  institution = {European Federation of Organisations for Medical Physics (EFOMP), Working Group on Angiographic and Fluoroscopic QC Protocol},
+  year        = {2024},
+  note    = {Version 01.2024 (v4). MTF/NPS sur images for processing, SNR\textsuperscript{2}-rate avec facteur de lag scalaire tiré de la NPS spatio-temporelle, TCDD statistique (3 frames intégrées) et CHO 2D frame par frame ; pas de DQE, pas de MTF temporelle, pas de test sur objet mobile (le lag n'entre que comme facteur scalaire du SNR\textsuperscript{2}-rate), pas de DQE(u,v,nu).},
+  url         = {https://www.efomp.org/uploads/be68860f-5f48-4450-9d96-27dc634a32a6/Angio%20QC%20Protocol_v4.pdf}
+}
+
+@article{hay1985,
+  author  = {Hay, G. A. and Clarke, O. F. and Coleman, N. J. and Cowen, A. R.},
+  title   = {A set of X-ray test objects for quality control in television fluoroscopy},
+  journal = {The British Journal of Radiology},
+  year    = {1985},
+  volume  = {58},
+  number  = {688},
+  pages   = {335--344},
+  doi     = {10.1259/0007-1285-58-688-335},
+  note    = {Origine des objets-tests de Leeds (TO.10 etc.), lecture visuelle seuil contraste-détail.}
+}
+
+@article{mccarthy2021,
+  author  = {McCarthy, Dean and Kenny, Patrick},
+  title   = {Extended detail contrasts for {TO.10} use on flat panel detector fluoroscopy systems},
+  journal = {The British Journal of Radiology},
+  year    = {2021},
+  volume  = {94},
+  number  = {1122},
+  pages   = {20201422},
+  doi     = {10.1259/bjr.20201422},
+  note    = {Le TO.10 doit être recalibré pour les combinaisons kV/Cu des capteurs plans modernes : fragilité pratique du contraste-détail visuel.}
+}
+
+
+% ---------------------------------------------------------------------
+% 4. Métriques actuelles : limites du visuel, figures de mérite
+% ---------------------------------------------------------------------
+
+@article{tapiovaara2004,
+  author  = {Tapiovaara, Markku J. and Sandborg, Michael},
+  title   = {How should low-contrast detail detectability be measured in fluoroscopy?},
+  journal = {Medical Physics},
+  year    = {2004},
+  volume  = {31},
+  number  = {9},
+  pages   = {2564--2576},
+  doi     = {10.1118/1.1779357},
+  note    = {Texte vérifié (PDF dans bibliographie/). Quatre méthodes comparées sur un même système de scopie : seuil de contraste subjectif, 2-AFC, 16-AFC et mesure physique du SNR\textsuperscript{2}\textsubscript{rate}. Résumé : « the precision and sensitivity of the threshold contrast measurement were seen to be modest in the constancy testing of fluoroscopic equipment: only large changes in system performance could be reliably detected by that method ». Écarts-types relatifs des observateurs individuels de 0 à 0,23, 75 \% entre 0,08 et 0,20. Conclusion : avec un ou deux observateurs, le seuil subjectif ne révèle que des changements « exceptionally large » si les tests sont espacés ou faits par des observateurs différents ; le nombre d'observateurs nécessaire est « impractically large » ; les méthodes MAFC souffrent aussi du grand nombre d'observations requises. Préconise le SNR\textsuperscript{2}\textsubscript{rate}, « task-dependent image quality descriptor », relié à la performance humaine par un temps d'intégration effectif (0,6 s en 2-AFC, 0,3 s en 16-AFC). Référence pivot entre « actuel » et « idéal » : la diapo peut dire « peu reproductible » pour le seuil visuel, et c'est l'origine du SNR\textsuperscript{2}rate de l'EFOMP 2024.}
+}
+
+@article{tapiovaara2005,
+  author  = {Tapiovaara, Markku},
+  title   = {Image quality measurements in radiology},
+  journal = {Radiation Protection Dosimetry},
+  year    = {2005},
+  volume  = {117},
+  number  = {1-3},
+  pages   = {116--119},
+  doi     = {10.1093/rpd/nci707},
+  note    = {Panorama court des mesures de qualité d'image en radiologie.}
+}
+
+@article{bath2007,
+  author  = {B{\aa}th, Magnus and M{\aa}nsson, Lars Gunnar},
+  title   = {Visual grading characteristics ({VGC}) analysis: a non-parametric rank-invariant statistical method for image quality evaluation},
+  journal = {The British Journal of Radiology},
+  year    = {2007},
+  volume  = {80},
+  number  = {951},
+  pages   = {169--176},
+  doi     = {10.1259/bjr/35012658},
+  note    = {VGC : le cadre statistique des études de grading visuel clinique. Métrique « actuelle » côté radiologue.}
+}
+
+@article{konst2019,
+  author  = {Konst, Bente and Weedon-Fekj{\ae}r, Harald and B{\aa}th, Magnus},
+  title   = {Image quality and radiation dose in planar imaging --- Image quality figure of merits from the {CDRAD} phantom},
+  journal = {Journal of Applied Clinical Medical Physics},
+  year    = {2019},
+  volume  = {20},
+  number  = {7},
+  pages   = {151--159},
+  doi     = {10.1002/acm2.12649},
+  note    = {Figures de mérite CDRAD (IQF) : variabilité observateur/lecteur automatique et dépendance à la dose.}
+}
+
+@article{kenny2020,
+  author  = {Kenny, Patrick and Costello, David and McCarthy, Dean and Kenny, Emer},
+  title   = {A novel quantitative measure of image quality in fluoroscopy},
+  journal = {Physica Medica},
+  year    = {2020},
+  volume  = {71},
+  pages   = {150--160},
+  doi     = {10.1016/j.ejmp.2020.02.002},
+  note    = {Figure de mérite logicielle sur images TO.10 remplaçant le scoring subjectif.}
+}
+
+@article{paruccini2021,
+  author  = {Paruccini, Nicoletta and Villa, Raffaele and Oberhofer, Nadia and Loria, Alessandro and Signoriello, Michele and Giordano, Carlo and Soavi, Raffaella and Colombo, Paola and De Mattia, Cristina and Rottoli, Federica and Nici, Stefania and Origgi, Daniela and Emiro, Francesca and D'Ercole, Loredana and Mantovani, Laura and Cavallari, Monica and Quattrocchi, Mariagrazia and Pietrobon, Francesca and Bregant, Paola and Riccardi, Lucia and Radice, Anna and Luraschi, Felicita and Milan, Lisa and Nocera, Paola and Strocchi, Sabina and Pierotti, Luisa and Taddeucci, Adriana and Guerra, Giorgia and Felisi, Marco and Riga, Stefano and Trianni, Annalisa},
+  title   = {A single phantom, a single statistical method for low-contrast detectability assessment},
+  journal = {Physica Medica},
+  year    = {2021},
+  volume  = {91},
+  pages   = {28--42},
+  doi     = {10.1016/j.ejmp.2021.10.007},
+  note    = {Multicentrique AIFM : un fantôme, une méthode statistique (observateur) : reproductibilité inter-sites bien meilleure que le visuel.}
+}
+
+@article{marques2026,
+  author  = {Marques, T{\'u}lio Guilherme Soares and Pina, Diana Rodrigues de},
+  title   = {Development and validation of a {3D} printed phantom for image quality assessment in fluoroscopy},
+  journal = {Journal of Applied Clinical Medical Physics},
+  year    = {2026},
+  volume  = {27},
+  number  = {6},
+  pages   = {e70650},
+  doi     = {10.1002/acm2.70650},
+  note    = {Fantôme bas contraste imprimé 3D validé en scopie ; illustre que le champ des objets-tests reste actif (mais statique).}
+}
+
+
+% ---------------------------------------------------------------------
+% 5. Cadre Fourier spatio-temporel
+% ---------------------------------------------------------------------
+
+@article{siewerdsen2002,
+  author  = {Siewerdsen, J. H. and Cunningham, I. A. and Jaffray, D. A.},
+  title   = {A framework for noise-power spectrum analysis of multidimensional images},
+  journal = {Medical Physics},
+  year    = {2002},
+  volume  = {29},
+  number  = {11},
+  pages   = {2655--2671},
+  doi     = {10.1118/1.1513158},
+  note    = {NPS multidimensionnelle (dont NPS(u,v,nu)) : formalisme et normalisation.}
+}
+
+@article{friedman2008,
+  author  = {Friedman, Saul N. and Cunningham, Ian A.},
+  title   = {A moving slanted-edge method to measure the temporal modulation transfer function of fluoroscopic systems},
+  journal = {Medical Physics},
+  year    = {2008},
+  volume  = {35},
+  number  = {6},
+  pages   = {2473--2484},
+  doi     = {10.1118/1.2919724},
+  note    = {MTF temporelle par bord incliné mobile (hypothèse de séparabilité).}
+}
+
+@article{friedman2010,
+  author  = {Friedman, Saul N. and Cunningham, Ian A.},
+  title   = {A spatio-temporal detective quantum efficiency and its application to fluoroscopic systems},
+  journal = {Medical Physics},
+  year    = {2010},
+  volume  = {37},
+  number  = {11},
+  pages   = {6061--6069},
+  doi     = {10.1118/1.3495968},
+  note    = {DQE(u,v,nu) sur amplificateur de brillance en scopie continue 30 i/s, RQA-5 : DQE(0) = 0,64, chute d'environ 50 \% à 15 Hz (Nyquist) due au repliement temporel du bruit ; lag stochastique non observé. Un filtre temporel linéaire (moyennage) affecte MTF et NPS de la même façon et « [is] not expected to have any effect on the resulting spatio-temporal DQE » (§V.C). Mesurée sans traitement constructeur (linéarité). Éq. (1) : DQE = $\bar{d}^2\,\mathrm{MTF}^2 / (\bar{q}\,\mathrm{NPS})$.}
+}
+
+@article{monnin2021,
+  author  = {Monnin, Pascal and Viry, Ana{\"i}s and Damet, J{\'e}r{\^o}me and Nowak, Marta and Vitzthum, Virginia and Racine, Damien},
+  title   = {A novel method to assess the spatiotemporal image quality in fluoroscopy},
+  journal = {Physics in Medicine \& Biology},
+  year    = {2021},
+  volume  = {66},
+  number  = {24},
+  pages   = {245001},
+  doi     = {10.1088/1361-6560/ac3c15},
+  note    = {Frame NEQ et frame system DQE : disque Cu 0,1 mm (50 mm de diamètre) en translation rectiligne, eau solide 5--20 cm, grille, traitement activé (approximation petit signal). Cios Fusion (arceau) et Axiom Artis Zee (cardio fixe), Siemens : DQE frame 0,65 à 20 cm avec grille pour les deux ; 0,38/0,42/0,50 à 5/10/15 cm et 0,43 sans grille sur l'Artis Zee ; indépendante de la cadence, du débit de dose (dose/frame constante) et, à l'approximation près, du traitement (MTF\_t = NTF\_t = H\_t) ; NEQ frame lui aussi invariant au filtre. L'effet du filtre récursif se lit dans MTF\_t (K 1--8 sur Artis Zee). Éq. (22) = NEQ frame (c'est la formule de la diapo 25 du webinaire), éq. (23) = DQE frame. La seule DQE de la chaîne complète.}
+}
+
+@misc{viry2023,
+  author       = {Viry, Ana{\"i}s},
+  title        = {Évaluation de la qualité d'image d'objets en mouvement en fluoroscopie},
+  howpublished = {Communication invitée, 61\textsuperscript{es} Journées scientifiques de la SFPM, session imagerie médicale, Nancy ; vidéo Canal-C2, \url{https://www.canalc2.tv/video/16383}, 26 min},
+  year         = {2023},
+  note         = {Équipe de Monnin (CHUV Lausanne). Vidéo, transcription automatique et captures dans bibliographie/Viry\_SFPM2023/ : les 15 diapos de résultats à la racine (nom = minutage + sujet) et la série complète des 45 diapos, états progressifs compris, dans le sous-dossier diapos/ (numéro + minutage). Deux méthodes : (1) qualitative pour arceaux mobiles, fantôme CDRAD sur plateforme mobile, courbe contraste-détail par plusieurs observateurs à 0, 2 et 10 mm/s et pour trois modes de dose (2, 3,7 et 5,6 mGy/min) : dégradation nette avec la vitesse ; jugée « subjective, éloignée d'une tâche clinique ». (2) quantitative pour salles fixes = Monnin 2021 pas à pas (disque Cu sur PMMA, MTF spatiale par bord franc statique, MTF temporelle par rapport des IRF en mouvement/statique, NPS 3D intégrée en fréquence temporelle), puis, absent de l'article, un observateur NPWE spatio-temporel : d' avec MTFxy, MTFt, filtre visuel (VTF), spectre d'un cathéter simulé (disque 1 mm, contraste du disque Cu) et NPS spatio-temporelle. Résultats sur Artis Zee : MTFt monte avec la cadence (3 à 30 i/s) et chute quand le K-factor passe de 1 à 8 ; filtre passe-bas et rehaussement de bord modifient la MTF spatiale ; la NPS spatiale baisse d'amplitude avec K sans changer de forme ; d' croît avec le débit de dose (2 à 10 mGy/min, scopie puis graphie) et chute avec la vitesse de l'objet (0 à 4 mm/s) pour deux machines à 15 et 5 i/s. Conclusion : « un système dynamique ne devrait pas être qualifié de manière statique : biais en statique en faveur des systèmes à faible résolution temporelle » ; perspectives : optimisation sur fantôme pour une tâche clinique, benchmark de systèmes. Précisions de l'oral (transcription) : « une machine à faible cadence, si on la caractérise en statique, on va avoir tendance à la surqualifier par rapport à une machine à 15 i/s, alors qu'en dynamique ces deux machines sont équivalentes » ; 600 à 800 images par mesure, exportées sans compression et avec les mêmes filtres que l'écran, accès difficile (d'où les salles fixes, avec les ingénieurs d'application) ; le d' spatio-temporel n'est pas publié, corrélation avec des observateurs humains encore à faire ; méthode appliquée à un appel d'offres (différences entre constructeurs vues, score 1--10 demandé par les biomédicaux). Question de la salle sur la NPS temporelle (images non simultanées) : réponse = elle montre la baisse de bruit due à la corrélation entre images. Utile : argument d'autorité pour le paradoxe (diapo 9), existence d'un d' spatio-temporel chez Monnin (diapo 13, citable seulement comme communication).}
+}
+
+
+@article{dehairs2019,
+  author  = {Dehairs, Michiel and Bosmans, Hilde and Marshall, Nicholas W.},
+  title   = {Implementation of a spatio-temporal figure of merit for new automatic dose rate control regimes in dynamic x-ray imaging},
+  journal = {Physics in Medicine \& Biology},
+  year    = {2019},
+  volume  = {64},
+  number  = {4},
+  pages   = {045001},
+  note    = {PMID 30630158. DOI non vérifié (Crossref/PubMed inaccessibles le 30/09) : métadonnées concordantes des listes de références de TG-272 (réf. 2 de l'annexe D) et d'Anthony 2022 (réf. 11). Figure de mérite spatio-temporelle (Leuven) pour évaluer les régimes d'AERC pilotés par le CNR ; TG-272 y renvoie en annexe D pour décrire ces régimes, avant de conclure qu'un fantôme adapté reste à concevoir.}
+}
+
+
+% ---------------------------------------------------------------------
+% 6. Métriques task-based
+% ---------------------------------------------------------------------
+
+@article{barrett1993,
+  author  = {Barrett, H. H. and Yao, J. and Rolland, J. P. and Myers, K. J.},
+  title   = {Model observers for assessment of image quality},
+  journal = {Proceedings of the National Academy of Sciences},
+  year    = {1993},
+  volume  = {90},
+  number  = {21},
+  pages   = {9758--9765},
+  doi     = {10.1073/pnas.90.21.9758},
+  note    = {Fondation des observateurs mathématiques (idéal, Hotelling, canalisé).}
+}
+
+@techreport{icru1996,
+  author      = {{International Commission on Radiation Units and Measurements}},
+  title       = {Medical Imaging -- The Assessment of Image Quality},
+  number      = {ICRU Report 54},
+  institution = {International Commission on Radiation Units and Measurements},
+  address     = {Bethesda, MD},
+  year        = {1996},
+  note        = {La qualité d'image se définit par rapport à une tâche : cadre conceptuel de l'exposé.}
+}
+
+@article{cunningham1999,
+  author  = {Cunningham, Ian A. and Shaw, Rodney},
+  title   = {Signal-to-noise optimization of medical imaging systems},
+  journal = {Journal of the Optical Society of America A},
+  year    = {1999},
+  volume  = {16},
+  number  = {3},
+  pages   = {621--632},
+  doi     = {10.1364/JOSAA.16.000621},
+  note    = {Lien DQE/NEQ -- détectabilité de l'observateur idéal : pourquoi la DQE est une métrique « de tâche » en système linéaire.}
+}
+
+@book{barrett2004,
+  author    = {Barrett, Harrison H. and Myers, Kyle J.},
+  title     = {Foundations of Image Science},
+  series    = {Wiley Series in Pure and Applied Optics},
+  publisher = {John Wiley \& Sons},
+  address   = {Hoboken, NJ},
+  year      = {2004},
+  isbn      = {978-0-471-15300-9},
+  note      = {Ouvrage de référence.}
+}
+
+@article{gang2011,
+  author  = {Gang, Grace J. and Lee, Junghoon and Stayman, J. Webster and Tward, Daniel J. and Zbijewski, Wojciech and Prince, Jerry L. and Siewerdsen, Jeffrey H.},
+  title   = {Analysis of {Fourier}-domain task-based detectability index in tomosynthesis and cone-beam {CT} in relation to human observer performance},
+  journal = {Medical Physics},
+  year    = {2011},
+  volume  = {38},
+  number  = {4},
+  pages   = {1754--1768},
+  doi     = {10.1118/1.3560428},
+  note    = {Indice de détectabilité d' en domaine de Fourier (NPW, NPWE, PW, PWE) validé contre humains : la recette pratique.}
+}
+
+@article{fetterly2018,
+  author  = {Fetterly, Kenneth A.},
+  title   = {Performance assessment of active vs passive pixel x-ray angiography detector systems using a bias-corrected channelized {Hotelling} observer and adult patient-equivalent experimental conditions},
+  journal = {Medical Physics},
+  year    = {2018},
+  volume  = {45},
+  number  = {11},
+  pages   = {4888--4896},
+  doi     = {10.1002/mp.13192},
+  note    = {CHO appliqué aux détecteurs d'angiographie en conditions patient-équivalent adulte.}
+}
+
+@article{villa2019,
+  author  = {Villa, Raffaele and Paruccini, Nicoletta and Baglivi, Antonia and Signoriello, Michele and Montezuma Velasquez, Roberto Alejandro and Morzenti, Sabrina and De Ponti, Elena and Crespi, Andrea},
+  title   = {Model observers for low contrast detectability evaluation in dynamic angiography: A feasible approach},
+  journal = {Physica Medica},
+  year    = {2019},
+  volume  = {64},
+  pages   = {89--97},
+  doi     = {10.1016/j.ejmp.2019.06.015},
+  note    = {Faisabilité des observateurs mathématiques sur séquences d'angiographie clinique.}
+}
+
+@article{gomezcardona2021,
+  author  = {Gomez-Cardona, Daniel and Favazza, Christopher P. and Leng, Shuai and Schueler, Beth A. and Fetterly, Kenneth A.},
+  title   = {Task-specific efficient channel selection and bias management for {Gabor} function channelized {Hotelling} observer model for the assessment of x-ray angiography system performance},
+  journal = {Medical Physics},
+  year    = {2021},
+  volume  = {48},
+  number  = {7},
+  pages   = {3638--3653},
+  doi     = {10.1002/mp.14813},
+  note    = {CHO à canaux de Gabor pour l'angiographie.}
+}
+
+@article{ingraito2023,
+  author  = {Ingraito, Chiara and Villa, Raffaele and Paruccini, Nicoletta and De Ponti, Elena},
+  title   = {Spatio-temporal generalized model observers methods for low contrast detectability assessment in digital angiography: Application to moving targets},
+  journal = {Physica Medica},
+  year    = {2023},
+  volume  = {108},
+  pages   = {102556},
+  doi     = {10.1016/j.ejmp.2023.102556},
+  note    = {Observateurs spatio-temporels sur cibles MOBILES en angiographie : la jonction task-based + dynamique.}
+}
+
+@article{gomezcardona2023,
+  author  = {Gomez-Cardona, Daniel and Favazza, Christopher P. and Leng, Shuai and Schueler, Beth A. and Fetterly, Kenneth A.},
+  title   = {Adaptation of a channelized {Hotelling} observer model to accommodate anthropomorphic backgrounds and moving test objects in {X}-ray angiography},
+  journal = {Medical Physics},
+  year    = {2023},
+  volume  = {50},
+  number  = {11},
+  pages   = {6737--6747},
+  doi     = {10.1002/mp.16686},
+  note    = {CHO avec fonds anthropomorphes et objets mobiles (Mayo).}
+}
+
+@article{mihailovic2024,
+  author  = {Mihailovic, Jelena M. and Kanaji, Yoshihisa and Miller, Daniel and Bell, Malcolm R. and Fetterly, Kenneth A.},
+  title   = {Comparison of human observer impression of {X}-ray fluoroscopy and angiography image quality with technical changes to image quality},
+  journal = {Journal of Medical Imaging},
+  year    = {2024},
+  volume  = {11},
+  number  = {4},
+  pages   = {045502},
+  doi     = {10.1117/1.JMI.11.4.045502},
+  note    = {Impression des cardiologues (granularité, netteté) plus sensible que les scores de détection : le fossé métrique/perception.}
+}
+
+@article{vanngocty2025,
+  author  = {Van Ngoc Ty, Claire and Tsapaki, Virginia and Nihou, Yassine and El Moallem, Bader and Fitton, Isabelle},
+  title   = {A proposal of a novel figure-of-merit defined from task-based detectability index in abdominal radiography},
+  journal = {Medical Physics},
+  year    = {2025},
+  volume  = {52},
+  number  = {7},
+  pages   = {e17973},
+  doi     = {10.1002/mp.17973},
+  note    = {Figure de mérite fondée sur d' en radiographie de projection (équipe française).}
+}
+
+
+% ---------------------------------------------------------------------
+% 7. Traitements non linéaires et débruitage par IA
+% ---------------------------------------------------------------------
+
+@article{samei2019,
+  author  = {Samei, Ehsan and Bakalyar, Donovan and Boedeker, Kirsten L. and Brady, Samuel and Fan, Jiahua and Leng, Shuai and Myers, Kyle J. and Popescu, Lucretiu M. and Ramirez Giraldo, Juan Carlos and Ranallo, Frank and Solomon, Justin and Vaishnav, Jay and Wang, Jia},
+  title   = {Performance evaluation of computed tomography systems: Summary of {AAPM} {T}ask {G}roup 233},
+  journal = {Medical Physics},
+  year    = {2019},
+  volume  = {46},
+  number  = {11},
+  pages   = {e735--e756},
+  doi     = {10.1002/mp.13763},
+  note    = {Texte vérifié (PDF dans bibliographie/). Résumé du TG-233 : « the nonlinear nature of these algorithms [reconstruction itérative] results in object-dependent resolution and noise performances. Thus, traditional image quality metrics, such as contrast-to-noise ratio, have become inadequate indicators of clinical imaging performance ». La MTF devient une TTF (task transfer function), mesurée comme une MTF mais rapportée avec le contraste de l'objet et le bruit de fond : « the system resolution becomes dependent on the object contrast and background noise level ». Métriques de performance : indice de détectabilité d' pour des cibles de 1, 5 et 10 mm, taux de localisation ; protocoles standardisés « to facilitate tracking, benchmarking, and quantitative comparisons ». Le scanner a déjà basculé vers le task-based : modèle à transposer en RI (diapo 13), et argument pour la non-linéarité (diapos 5 et 14).}
+}
+
+@article{solomon2020,
+  author  = {Solomon, Justin and Lyu, Peijei and Marin, Daniele and Samei, Ehsan},
+  title   = {Noise and spatial resolution properties of a commercially available deep learning-based {CT} reconstruction algorithm},
+  journal = {Medical Physics},
+  year    = {2020},
+  volume  = {47},
+  number  = {9},
+  pages   = {3961--3971},
+  doi     = {10.1002/mp.14319},
+  note    = {Texte vérifié (PDF dans bibliographie/). GE Revolution, FBP vs ASiR-V vs TrueFidelity (DL), fantôme Mercury à cinq doses, fantôme texturé poumon avec 20 répétitions. Résolution haut contraste identique pour tous (TTF f50 à moins de 3 \%) ; résolution bas contraste inférieure pour ASiR-V et TF : f50 réduit de 17, 25 et 37 \% pour TF low, medium, high à 10 mGy (TTF bas contraste non mesurable aux doses inférieures, CNR trop faible). Bruit réduit de 68 \% (TF high) et 74 \% (ASiR-V 100 \%) ; texture presque conservée pour TF (fav −9 \%) contre −55 \% pour ASiR-V ; bruit localement NON stationnaire pour les deux, plus fort près des bords de vaisseaux et plus faible dans les zones uniformes (indice d'inhomogénéité ×4 à 1 mGy). La dépendance de la résolution et de la texture à la dose et à la taille du fantôme est attribuée à un prétraitement bas signal propre au scanner, « not a general principle » : ne pas dire que la MTF du DL dépend de la dose. À retenir pour la diapo : la MTF dépend du contraste (TTF), et le bruit dépend de l'objet (non stationnaire).}
+}
+
+@article{zeng2022,
+  author  = {Zeng, Rongping and Lin, Claire Yilin and Li, Qin and Jiang, Lu and Skopec, Marlene and Fessler, Jeffrey A. and Myers, Kyle J.},
+  title   = {Performance of a deep learning-based {CT} image denoising method: Generalizability over dose, reconstruction kernel, and slice thickness},
+  journal = {Medical Physics},
+  year    = {2022},
+  volume  = {49},
+  number  = {2},
+  pages   = {836--853},
+  doi     = {10.1002/mp.15430},
+  note    = {Cadre FDA d'évaluation des débruiteurs DL : MTF contraste-dépendante, NPS, tests de généralisabilité.}
+}
+
+@article{luo2022,
+  author  = {Luo, Yimin and Ma, Yingliang and O'Brien, Hugh and Jiang, Kui and Kohli, Vikram and Maidelin, Sesilia and Saeed, Mahrukh and Deng, Emily and Pushparajah, Kuberan and Rhode, Kawal S.},
+  title   = {Edge-enhancement densenet for {X}-ray fluoroscopy image denoising in cardiac electrophysiology procedures},
+  journal = {Medical Physics},
+  year    = {2022},
+  volume  = {49},
+  number  = {2},
+  pages   = {1262--1275},
+  doi     = {10.1002/mp.15426},
+  note    = {Débruitage DL en scopie d'électrophysiologie : SNR x2,2, évalué en PSNR/SSIM, pas en métriques de tâche.}
+}
+
+@incollection{kim2022,
+  author    = {Kim, Wonjin and Lee, Wonkyeong and Jeon, Sun-Young and Kang, Nayeon and Jo, Geonhui and Choi, Jang-Hwan},
+  title     = {Deep Denoising Network for {X}-Ray Fluoroscopic Image Sequences of Moving Objects},
+  booktitle = {Machine Learning for Medical Image Reconstruction (MLMIR 2022)},
+  editor    = {Haq, Nandinee and Johnson, Patricia and Maier, Andreas and Qin, Chen and W{\"u}rfl, Tobias and Yoo, Jaejun},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {13587},
+  publisher = {Springer},
+  address   = {Cham},
+  year      = {2022},
+  pages     = {95--104},
+  doi       = {10.1007/978-3-031-17247-2_10},
+  note      = {Réseau à auto-attention + flux optique pour séquences d'objets mobiles.}
+}
+
+@inproceedings{whitehead2025,
+  author    = {Whitehead, Joseph F. and Hu, Yi and Kim, Jong Woo and Chang, Yu-Bing and Baumgart, John and Manak, Joseph},
+  title     = {Deep learning fluoroscopy denoising: a beam quality insensitive approach},
+  booktitle = {Medical Imaging 2025: Physics of Medical Imaging},
+  editor    = {Sabol, John M. and Abbaszadeh, Shiva and Li, Ke},
+  series    = {Proceedings of SPIE},
+  volume    = {13405},
+  pages     = {1340511},
+  publisher = {SPIE},
+  year      = {2025},
+  doi       = {10.1117/12.3040524},
+  note      = {Débruitage DL scopie insensible à la qualité de faisceau (GE).}
+}
+
+@article{jeon2025,
+  author  = {Jeon, Sun-Young and Wang, Sen and Wang, Adam S. and Gold, Garry E. and Choi, Jang-Hwan},
+  title   = {Unsupervised Training of a Dynamic Context-Aware Deep Denoising Framework for Low-Dose Fluoroscopic Imaging},
+  journal = {IEEE Transactions on Instrumentation and Measurement},
+  year    = {2025},
+  volume  = {74},
+  pages   = {1--15},
+  doi     = {10.1109/TIM.2025.3551492},
+  note    = {Débruitage non supervisé, compensé en mouvement, sans référence propre : évalué contre des pseudo-références.}
+}
+
+@article{zhao2026,
+  author  = {Zhao, Huangxuan and Bai, Yaowei and Chen, Lei and Ma, Jinqiang and Lei, Yu and Sun, Tao and Wu, Linxia and Zhang, Ruiheng and Xu, Ziyang and Liang, Xiaoyun and Li, Yi and Huang, Yan and Feng, Yun and Hong, Cheng and Miao, Zhongrong and Long, Lin and Zhu, Haidong and Zheng, Jiahe and Fan, Lin and Fang, Zhuting and Dong, Peng and Zhang, Lefei and Han, Xiaoyu and Wang, Bin and Liang, Bin and Xia, Xiangwen and Kan, Xuefeng and Zhu, Chengcheng and Du, Bo and Wang, Xinggang and Zheng, Chuansheng},
+  title   = {Generative {AI}-based low-dose digital subtraction angiography for intra-operative radiation dose reduction: a randomized controlled trial},
+  journal = {Nature Medicine},
+  year    = {2026},
+  volume  = {32},
+  number  = {1},
+  pages   = {288--296},
+  doi     = {10.1038/s41591-025-04042-6},
+  note    = {GenDSA : essai randomisé multicentrique (1068 patients), DSA générative, dose réduite des deux tiers. Évaluation clinique, sans métrique physique de la chaîne.}
+}
+
+@misc{madoff2026,
+  author       = {Madoff, David C. and Tamez Aguilar, Hector and Angtuaco, Michael J. and Asnes, Jeremy D. and Barr, John D. and Frei, Donald F. and George, Jon C. and Hohenwalter, Eric J. and K{\"a}stner, Thomas and Lacey, David L. and Meraj, Perwaiz and Obuchowski, Nancy and Puma, Joseph A. and Quinn, Brian P. and Sahlein, Daniel H. and Setser, Randolph and Secemsky, Eric A. and Tashenov, Stanislav},
+  title        = {Clinical Evaluation of a Novel Artificial Intelligence-Based Image Processing Algorithm for Two-Dimensional Angiography},
+  howpublished = {Research Square preprint, version 1},
+  year         = {2026},
+  month        = aug,
+  doi          = {10.21203/rs.3.rs-10603810/v1},
+  url          = {https://www.researchsquare.com/article/rs-10603810/v1},
+  note         = {Preprint non relu (Research Square, 2026), texte vérifié (PDF dans bibliographie/). OPTIQ AI (Siemens Healthineers) : débruiteur spatial par apprentissage profond, stochastique et électronique, sur scopie, acquisitions natives, DSA, roadmap et overlay, en remplacement du débruiteur précédent ; plus un nouvel algorithme d'overlay. Étude multicentrique en aveugle, 13 lecteurs (médiane 19 ans d'expérience), paires de scènes côte à côte synchronisées, échelle 1--5. Non-infériorité de la qualité image globale dans 98,9 \% des cas ; supériorité sur plusieurs métriques en scopie, roadmap, overlay et acquisition native, pas en DSA. Aucune métrique physique (MTF, NPS, détectabilité) ; auteurs Siemens parmi les signataires ; impact dosimétrique renvoyé à des études futures.}
+}
+
+@article{assar2026,
+  author  = {Assar, Saba and Winkens, Mark and van der Marel, Kajo and van Pelt, Roy and Johnson, Lindsay and van Mourik, Martijn S. and Ibrahim, Ragui and L'Allier, Philippe and Lim, Soo Teik and Raj, Leah and Nicholson, William and Collins, Michael and Kirtane, Ajay J.},
+  title   = {Exploring a Novel Processing Algorithm to Improve Image Quality and Reduce {X}-Ray and Contrast Dose for Coronary Angiography: A Blinded Pilot Study},
+  journal = {Journal of the Society for Cardiovascular Angiography \& Interventions},
+  year    = {2026},
+  volume  = {5},
+  number  = {6},
+  pages   = {105343},
+  doi     = {10.1016/j.jscai.2026.105343},
+  note    = {Texte vérifié (PDF dans bibliographie/, PIIS2772930326010896.pdf). SmartIQ (Philips), itération de ClarityIQ, sur Azurion 7 C12 : « processes spatial and temporal image signal characteristics » ; l'article ne parle NI d'IA NI d'apprentissage, ne pas l'écrire. Pilote de 50 patients, deux coronarographies séquentielles par patient (ClarityIQ puis SmartIQ, à dose réduite de moitié ou iode réduit), 5 cardiologues interventionnels en aveugle : score de qualité supérieur d'un point sur 5 (p < 0,01), SmartIQ préféré dans 214 des 220 comparaisons, accord inter-lecteurs 0,53--0,67. Co-auteurs Philips. Aucune métrique physique (pas de MTF, NPS, détectabilité, fantôme). Source de « chez Philips » sur la diapo IA.}
+}
+
+@article{maruyama2026,
+  author  = {Maruyama, Sho and Saitou, Hiroki},
+  title   = {Quantitative evaluation of a deep learning-based noise reduction algorithm in digital radiography using noise power spectrum analysis},
+  journal = {Journal of Applied Clinical Medical Physics},
+  year    = {2026},
+  volume  = {27},
+  number  = {3},
+  pages   = {e70521},
+  doi     = {10.1002/acm2.70521},
+  note    = {NPS d'un débruiteur DL commercial en DR : le filtre remodèle le spectre de bruit de façon non uniforme selon fréquence et dose.}
+}
+
+@article{hultenmo2025,
+  author  = {Hultenmo, Maria and Pernbro, Johanna and Ahlin, Jenny and Bonnier, Martin and B{\aa}th, Magnus},
+  title   = {Evaluation of an artificial intelligence noise reduction tool for conventional {X}-ray imaging -- a visual grading study of pediatric chest examinations at different radiation dose levels using anthropomorphic phantoms},
+  journal = {Pediatric Radiology},
+  year    = {2025},
+  volume  = {55},
+  pages   = {1475--1486},
+  doi     = {10.1007/s00247-025-06251-0},
+  note    = {Débruiteur IA (Canon INR) évalué par VGC : 20--50 \% de réduction de dose possible selon la structure.}
+}
+
+@article{poludniowski2026,
+  author  = {Poludniowski, Gavin and Titternes, Rebecca and Flores, Jessica and Thor, Daniel},
+  title   = {Nonprewhitening model observers in the {F}ourier and spatial domain: a comparison of predictions for iterative and deep learning reconstruction in computed tomography},
+  journal = {Radiation Protection Dosimetry},
+  year    = {2026},
+  volume  = {202},
+  number  = {3--4},
+  pages   = {305--313},
+  doi     = {10.1093/rpd/ncaf160},
+  note    = {L'observateur NPW calculé en Fourier surestime le bénéfice du débruitage (itératif et DL) ; en domaine spatial il rejoint l'humain (montré pour la reconstruction itérative). Argument-clé « pourquoi Fourier échoue ».}
+}
+
+@article{yu2025,
+  author  = {Yu, Lifeng and Chen, Guang-Hong and Fletcher, Joel G. and Jiang, Lu and Kachelrie{\ss}, Marc and Zeng, Rongping and Zhou, Zhongxing},
+  title   = {Deep learning in {CT} image reconstruction and processing: techniques, performance evaluation, radiation dose, and future perspective},
+  journal = {British Journal of Radiology},
+  year    = {2025},
+  volume  = {98},
+  number  = {1175},
+  pages   = {1775--1787},
+  doi     = {10.1093/bjr/tqaf260},
+  note    = {Revue 2025 : méthodes d'évaluation des algorithmes DL (fantômes, patients, essais virtuels) et pièges.}
+}
+
+
+% ---------------------------------------------------------------------
+% 8. Comptage photonique
+% ---------------------------------------------------------------------
+
+@article{ahmad2017,
+  author  = {Ahmad, Moiz and Fahrig, Rebecca and Pung, Leland and Spahn, Martin and K{\"o}ster, Niko S. and Reitz, Silke and Moore, Teri and Choi, Jang-Hwan and Hinshaw, Waldo and Xia, Yan and M{\"u}ller, Kerstin},
+  title   = {Assessment of a photon-counting detector for a dual-energy {C}-arm angiographic system},
+  journal = {Medical Physics},
+  year    = {2017},
+  volume  = {44},
+  number  = {11},
+  pages   = {5938--5948},
+  doi     = {10.1002/mp.12517},
+  note    = {Détecteur CdTe à comptage sur arceau angiographique bi-énergie.}
+}
+
+@article{tanguay2018,
+  author  = {Tanguay, Jesse and Cunningham, Ian A.},
+  title   = {Cascaded systems analysis of charge sharing in cadmium telluride photon-counting x-ray detectors},
+  journal = {Medical Physics},
+  year    = {2018},
+  volume  = {45},
+  number  = {5},
+  pages   = {1926--1941},
+  doi     = {10.1002/mp.12853},
+  note    = {Modèle en cascade (DQE) des détecteurs à comptage : le cadre Fourier s'applique directement.}
+}
+
+@article{aubert2023,
+  author  = {Aubert, Sarah and Tanguay, Jesse},
+  title   = {Signal-difference-to-noise comparison of temporal subtraction, {kV}-switching dual-energy and photon-counting dual-energy x-ray angiography},
+  journal = {Medical Physics},
+  year    = {2023},
+  volume  = {50},
+  number  = {12},
+  pages   = {7400--7414},
+  doi     = {10.1002/mp.16800},
+  note    = {Où le comptage photonique paierait en angiographie (SDNR).}
+}

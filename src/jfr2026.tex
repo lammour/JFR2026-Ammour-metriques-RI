@@ -1,0 +1,278 @@
+% ============================================================================
+% jfr2026.tex
+% JFR 2026 — Évaluation objective de la qualité d'image en radiologie
+% interventionnelle : quelles métriques ?
+%
+% Compilation : ./build.sh (latexmk : lualatex + biber, sortie dans build/)
+% Plan détaillé, texte d'oral et minutage : plan_JFR2026.md
+% Modèle : commun/preambule-presentation.tex (copié du projet cours), palette JFR.
+% Règles de rédaction : CLAUDE.md (une idée par diapo, pas de sous-titre,
+% sources en bas via \src, un \highlight par diapo).
+% ============================================================================
+
+\documentclass[aspectratio=169, 11pt]{beamer}
+\newcommand{\commun}{commun}
+\newcommand{\palettecourante}{JFR}
+\input{\commun/preambule-presentation}
+\usepackage{jfr2026}      % \src{cles} en bas de diapo, \refslide{cles}, pages titre/fin
+\graphicspath{{../figures/}}
+% \setbeameroption{show notes on second screen=right}   % notes d'orateur
+
+\title[Qualité d'image en radiologie interventionnelle : quelles métriques ?]
+  {Évaluation objective de la qualité d'image en radiologie interventionnelle : quelles métriques ?}
+\subtitle{Du bruit au mouvement :\\ mettre le temps dans la qualité image}
+\author[L. Ammour, H. Desal]{Dr Luis Ammour, Pr Hubert Desal}
+\institute[CHU Nantes]{CHU de Nantes}
+\date[JFR 2026]{\footnotesize\makebox[0pt][l]{Journées Francophones de Radiologie Diagnostique et Interventionnelle}\\ 8 octobre 2026}
+
+\begin{document}
+
+% --------------------------- DIAPO 1 · TITRE (0:00 → 0:20) ------------------
+\pagetitre
+
+% ============================================================================
+\section{État des lieux}
+
+% --------------------------- DIAPO 2 (0:20 → 1:30) --------------------------
+\begin{frame}{Pourquoi l'interventionnel est un cas à part}
+  \begin{itemize}
+    \item \textbf{La dose compte :} le seuil des effets déterministes peut être atteint sur les procédures longues.
+    \item \textbf{L'image est un flux :} 7,5 à 30 images/s, cathéter en mouvement. La tâche clinique porte sur la \emph{séquence}, pas sur l'image isolée.
+    \item \textbf{Le traitement constructeur fait l'image :} filtres temporels et rehaussement non linéaire, opaques, pilotés par la dose.
+  \end{itemize}
+  \vspace{0.2cm}
+  {\color{Sage}\bfseries Anthony et al. 2022\srcref{anthony2022} :} deux salles comparables en débit de kerma et en résolution, deux traitements opposés, lissage spatial et \highlight{SNR $\times$ 4} d'un côté, rehaussement de contours et \highlight{contraste $+$88\,\%} de l'autre.
+  \src{anthony2022}
+\end{frame}
+
+% --------------------------- DIAPO 3 (1:30 → 3:00) --------------------------
+\begin{frame}{Ce que nous mesurons aujourd'hui}
+  \small
+  \renewcommand{\arraystretch}{1.0}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{1.6cm}>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{3.5cm}@{}}
+    & {\color{Slate}\bfseries Constructeur} & {\color{Slate}\bfseries Recette et CQ} & {\color{Slate}\bfseries Clinique} \\
+    \midrule
+    {\color{Sage}\bfseries Source} & DQE selon IEC 62220-1-3\srcref{iec2008}, via MTF et NPS & ANSM 2016\srcref{ansm2016}, TG-272\srcref{lin2022}, EFOMP 2024\srcref{efomp2024} & Cotation visuelle\srcref{bath2007}, études de lecture \\
+    \noalign{\vskip 1.5pt{\color{StoneLight}\hrule height 0.5\lightrulewidth}\vskip 1.5pt}
+    {\color{Sage}\bfseries Contenu} & Images brutes, faisceau RQA5 sans grille ; une DQE par trame & Résolution, bas contraste, uniformité ; CHO 2D par trame ; roue tournante & Images traitées, flux réel ; qualité perçue ou détection \\
+    \noalign{\vskip 1.5pt{\color{StoneLight}\hrule height 0.5\lightrulewidth}\vskip 1.5pt}
+    {\color{Sage}\bfseries Limites} & Avant traitement, sans patient ; lag retiré, filtre invisible & Roue lue à l'œil, \textbf{qualitatif} ; MTF et NPS sans traitement, pas de DQE & Subjectif, coûteux, tardif \\
+  \end{tabular}
+  \vspace{0.05cm}
+  \begin{center}
+    \highlight{statique} \quad \highlight{avant traitement} \quad \highlight{ou subjectif}
+  \end{center}
+  \vspace{-0.2cm}
+  \src{iec2008,ansm2016,lin2022,efomp2024,bath2007}
+\end{frame}
+
+% --------------------------- DIAPO 4 (3:00 → 4:00) --------------------------
+\begin{frame}{Trois angles morts}
+  \centering
+  \includegraphics[width=0.66\linewidth]{nema_roue_lag.png}
+  \sourceimage{Roue NEMA XR-21 à 7,5 i/s : sans lag, lag modéré, lag extrême. TG-272, fig. 17.}
+  \vspace{0.1cm}
+  \raggedright
+  \begin{itemize}
+    \item \textbf{Lag} : rémanence du détecteur, le bruit d'une trame est corrélé à la précédente\srcref{konst2021}.
+    \item \textbf{Filtre récursif} : l'image affichée mélange la trame courante et la précédente. Moins de bruit, plus de flou, réglage rarement documenté\srcref{konst2021}.
+    \item \textbf{Non-linéarité} : la réponse dépend du contraste et de la dose, il n'y a plus \emph{une} MTF\srcref{monnin2021}.
+  \end{itemize}
+  \src{konst2021,monnin2021}
+\end{frame}
+
+% ============================================================================
+\section{Mesurer le filtre récursif}
+
+% --------------------------- DIAPO 5 (4:00 → 5:40) --------------------------
+\begin{frame}{Trois images pour mesurer le filtre}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \textbf{Filtre récursif}
+      \vspace{-0.25cm}
+      {\[ I[n] = \tfrac{1}{K}\bigl( S[n] + (K-1)\,I[n-1] \bigr) \]}
+      \par\vspace{-0.2cm}
+      {\tiny\color{StoneLight} $I$ : image affichée, $S$ : trame acquise, $n$ : numéro de trame, $K$ : K-factor de la console.\par}
+      \vspace{0.12cm}
+
+      \textbf{Méthode de {\color{Sage}Konst et al. 2021}\srcref{konst2021}}
+      \begin{enumerate}
+        \item Fantôme de PMMA, protocole clinique.
+        \item Deux trames voisines $B$, $C$ ; une trame éloignée $A$.
+        \item {\small $\displaystyle K = \frac{R+1}{2R}, \qquad R = \frac{\mathrm{Var}(C-B)}{\mathrm{Var}(B+C) - 4\sigma_{\mathrm{fixe}}^2}$}\\[4pt]
+          {\small $\sigma_{\mathrm{fixe}}^2$ : bruit de structure fixe, $\sigma_{\mathrm{fixe}}^2 = \mathrm{Cov}(A, C) = \tfrac{1}{4}\bigl[\mathrm{Var}(A+C) - \mathrm{Var}(C-A)\bigr]$.}\\
+          {\tiny\color{StoneLight} Var : variance des pixels dans la ROI.}
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \centering
+      \includegraphics[height=6.2cm]{montage_icono.jpg}
+      \sourceimage{PMMA 20 cm entre tube et détecteur, Siemens Artis Icono biplan, CHU Nantes.}
+    \end{column}
+  \end{columns}
+  \src{konst2021}
+\end{frame}
+
+% --------------------------- DIAPO 5 bis : résultats CHU Nantes ---------------
+\begin{frame}{Mesuré à Nantes sur l'Artis Icono}
+  \centering
+  \includegraphics[width=0.90\linewidth]{beta_icono.pdf}
+  \sourceimage{Siemens Artis Icono biplan, PMMA 20 cm, 24 boucles, deux répétitions par protocole.}
+  \raggedright
+  \small
+  \begin{itemize}
+    \item \textbf{Rapport des lags} (non publié) : même principe que Konst\srcref{konst2021} avec une trame de plus pour éliminer le bruit non filtré, $1-\rho(2)/\rho(1)$.
+    \item \textbf{$K$ manuels} : retrouvés de 1 à 32, répétabilité 0,4\,\%.
+    \item \textbf{Protocoles cliniques} : \highlight{$K = 3{,}9$} partout, le filtrage ne dépend pas de la dose.
+  \end{itemize}
+  \src{konst2021}
+\end{frame}
+
+% --------------------------- DIAPO 6 (5:40 → 6:40) --------------------------
+\begin{frame}{Le paradoxe du disque statique}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{disque_icono.pdf}
+      \sourceimage{Disque Cu 0,1 mm sur PMMA 20 cm, Sc(−) 7,5 i/s, même dose, même fenêtre. Artis Icono, CHU Nantes.}
+      \vspace{0.05cm}
+      \includegraphics[width=\linewidth]{mobile_icono.pdf}
+      \sourceimage{Simulation : bille de 3 mm à 30 mm/s ajoutée aux trames réelles sans filtre, filtre récursif appliqué numériquement.}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \small
+      \begin{itemize}
+        \item \textbf{Objet immobile}, même dose : CNR de 0,34 à 0,91, soit $\times\,2{,}6$, exactement $\sqrt{2K-1}$\srcref{konst2021}.
+      \end{itemize}
+      \vspace{0.05cm}
+      Plus on filtre, meilleur est le CNR statique : la métrique récompense \highlight{ce qui dégrade le mouvement}.
+
+      \vspace{0.3cm}
+      {\color{Sage}\bfseries Villa et al. 2026\srcref{villa2026} :} un mode adaptatif filtre moins autour de l'objet, la traînée réelle peut être réduite.
+    \end{column}
+  \end{columns}
+  \src{konst2021,villa2026}
+\end{frame}
+
+% ============================================================================
+\section{Mettre le temps dans la DQE}
+
+% --------------------------- DIAPO 7 (6:40 → 7:50) --------------------------
+\begin{frame}{La DQE spatio-temporelle}
+  % pas d'accolade en tête de corps : beamer la lirait comme un sous-titre de frame
+  \textcolor{Sage}{\bfseries Friedman et Cunningham 2010\srcref{friedman2010} :}
+  \vspace{-0.1cm}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \eqbox{\mathrm{DQE}(u, v, \nu) = \frac{\mathrm{MTF}^2(u, v, \nu)}{\dot{q}\cdot\mathrm{NNPS}(u, v, \nu)}}
+      \par\vspace{-0.15cm}
+      {\tiny\color{StoneLight} $u$, $v$ : fréquences spatiales ; $\nu$ : fréquence temporelle\srcref{friedman2008} ; $\dot{q}$ : débit de fluence incident ; $\mathrm{NNPS} = \mathrm{NPS}/\bar{d}^{\,2}$\srcref{siewerdsen2002}.\par}
+      \vspace{0.3cm}
+
+      Mesurée sans traitement à 30 i/s, elle chute d'environ \highlight{50\,\% à 15 Hz} par repliement temporel du bruit.
+      \vspace{0.2cm}
+
+      Elle voit le lag et le repliement, elle est \textbf{aveugle au filtre temporel}.
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{dqe_friedman_t.png}
+      \sourceimage{Friedman et Cunningham 2010, fig. 6.}
+    \end{column}
+  \end{columns}
+  \src{friedman2010,friedman2008,siewerdsen2002}
+\end{frame}
+
+% --------------------------- DIAPO 8 (7:50 → 9:00) --------------------------
+\begin{frame}{La DQE de la chaîne complète, traitement compris}
+  \twocols{%
+    \centering
+    \includegraphics[height=2.6cm]{disque_monnin.png}
+    \sourceimage{Disque Cu 0,1 mm en translation. Monnin et al. 2021.}
+    \vspace{0.05cm}
+    \includegraphics[width=0.95\linewidth]{nps_icono.pdf}
+    \sourceimage{NPS temporelle mesurée à Nantes, Artis Icono, Sc 7,5 i/s.}
+  }{%
+    \small
+    \textcolor{Sage}{\bfseries Monnin et al. 2021\srcref{monnin2021} :}
+    \vspace{0.1cm}
+
+    \textbf{Faible contraste, traitement activé.} Pour un disque de 0,1 mm Cu, le traitement se comporte à peu près linéairement : mesure avec grille, diffusé et traitement en place.
+    \vspace{0.25cm}
+
+    \textbf{DQE de trame} : signal intégré avec la MTF temporelle, bruit avec la NPS temporelle, sur la chaîne complète.
+    \vspace{0.25cm}
+
+    \textbf{La DQE de trame est} \highlight{invariante au filtre temporel} : le compromis bruit / mouvement se lit à part, dans la \textbf{MTF temporelle}.
+  }
+  \src{monnin2021}
+\end{frame}
+
+% --------------------------- DIAPO 9 (9:00 → 10:00) -------------------------
+\begin{frame}{De la DQE à la tâche}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.31\textwidth}
+      \textbf{Le principe}\\[2pt]
+      La qualité d'image, c'est la performance à une tâche : voir un guide qui bouge, pas un disque immobile. Du NEQ de trame, un observateur mathématique tire une détectabilité $d'$.
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \textbf{Pourquoi c'est nécessaire}\\[2pt]
+      Le seuil visuel sur objet-test ne voit que de grands changements, 8 à 20\,\% d'écart par observateur\srcref{tapiovaara2004}. Le scanner a basculé avec le TG-233\srcref{samei2019} : TTF et $d'$ remplacent MTF et CNR.
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \textbf{C'est faisable en RI}\\[2pt]
+      Observateurs spatio-temporels sur cibles mobiles, à 12\,\% des lecteurs humains\srcref{ingraito2023}. Un $d'$ spatio-temporel sur la chaîne complète : Monnin et al. (non publié, présenté aux JS SFPM 2023)\srcref{viry2023}.
+    \end{column}
+  \end{columns}
+  \vspace{0.25cm}
+  \centering
+  Il manque \highlight{une tâche clinique} définie avec les radiologues.
+  \src{tapiovaara2004,samei2019,ingraito2023,viry2023}
+\end{frame}
+
+% ============================================================================
+\section{Et maintenant}
+
+% --------------------------- DIAPO 10 (10:00 → 11:00) -----------------------
+\begin{frame}{L'IA rend ce basculement urgent}
+  \twocols{%
+    \textbf{Ce qui arrive en salle}
+    \begin{itemize}
+      \item Débruiteur par apprentissage chez Siemens\srcref{madoff2026}, nouvelle chaîne spatio-temporelle chez Philips\srcref{assar2026}.
+      \item Une DSA générative : kerma $-$67\,\% dans un essai randomisé de 1068 patients\srcref{zhao2026}.
+      \item Évaluées par des lecteurs, sans métrique physique de la chaîne.
+    \end{itemize}
+  }{%
+    \textbf{Ce que l'on sait des métriques}
+    \begin{itemize}
+      \item La MTF d'une reconstruction par apprentissage dépend du contraste\srcref{solomon2020}.
+      \item Un observateur calculé en Fourier \emph{surestime} le bénéfice du débruitage\srcref{poludniowski2026}.
+      \item Son bruit n'est plus stationnaire : plus fort près des bords, plus faible dans les zones uniformes\srcref{solomon2020}.
+    \end{itemize}
+  }
+  \src{madoff2026,assar2026,zhao2026,solomon2020,poludniowski2026}
+\end{frame}
+
+% --------------------------- DIAPO 11 (11:00 → 12:00) -----------------------
+\begin{frame}{Ce que nous pouvons faire dès demain}
+  \begin{enumerate}
+    \item \textbf{À la recette et au suivi} : mesurer $K$ sur chaque protocole. Un fantôme de PMMA, trois images, quelques minutes. L'écrire dans le rapport, à côté de la dose.
+    \item \textbf{Dans les protocoles nationaux} : porter la NPS temporelle, la MTF temporelle et le NEQ de trame ; viser la DQE de trame pour la normalisation.
+    \item \textbf{En recherche clinique} : définir des tâches de référence et un observateur commun ; étudier les nouveaux algorithmes d'IA.
+  \end{enumerate}
+  \vspace{0.4cm}
+  \centering
+  \highlight{Une DQE ne dit pas ce que vous voyez.}
+\end{frame}
+
+% ============================================================================
+\appendix
+
+% --------------------------- RÉFÉRENCES (non commentées) --------------------
+\refslide{anthony2022,konst2021,viry2023,iec2008,ansm2016,lin2022,efomp2024,friedman2010,monnin2021,ingraito2023,poludniowski2026,zhao2026}
+
+% --------------------------- PAGE DE FIN -------------------------------------
+\pagefin[placeholder_boucle_bruit.png]{Questions :\\ luis.ammour@chu-nantes.fr}
+
+\end{document}

@@ -1,0 +1,98 @@
+% ============================================================================
+%  ENCADRÉS — mêmes environnements dans le cours et dans la présentation
+% ============================================================================
+%
+%  RÈGLES D'USAGE (à respecter strictement, Beamer pousse à en abuser)
+%
+%  Un encadré contient une chose que l'étudiant doit pouvoir restituer telle
+%  quelle. Tout ce qui est explication, raisonnement, contexte ou liste
+%  d'arguments est du texte courant, jamais un encadré.
+%
+%    definition   ce que signifie un mot ou un symbole, en une ou deux phrases
+%    aretenir     LA formule ou LE résultat du passage, pas un résumé
+%    attention    une erreur fréquente ou une idée fausse, en une phrase
+%    question     une question posée aux étudiants, à laquelle on répond ensuite
+%    exercice     un énoncé à résoudre (numéroté dans le cours)
+%    exemple      PAS un encadré : un paragraphe avec l'étiquette « Exemple »
+%
+%  Présentation : au plus un encadré par diapositive, et en pratique un
+%  encadré pour trois à cinq diapositives. Un encadré tient en trois lignes.
+%  Cours : jamais deux encadrés qui se suivent sans texte entre eux ;
+%  un encadré ne dépasse pas un tiers de page.
+%  Pas de liste dans un encadré, sauf dans exercice.
+%  Ne pas créer de nouveau type d'encadré.
+%
+%  Identité visuelle (Bauhaus) : coins droits, fond pâle, pas de bordure,
+%  une forme pleine à cheval sur le coin supérieur gauche :
+%    cercle Slate = definition, aretenir ; triangle ambre = attention ;
+%    carré Sage = question, exercice.
+% ============================================================================
+
+\tcbuselibrary{skins,breakable}
+
+% Beamer définit déjà « definition » (théorème) : on le libère.
+\ifdefined\definition \let\definition\undefined \let\enddefinition\undefined \fi
+
+\newlength{\marqueurTaille}\setlength{\marqueurTaille}{0.24cm}
+
+\tcbset{
+  bauhaus/.style 2 args={
+    enhanced, breakable, sharp corners, frame hidden, boxrule=0pt,
+    colback=#2, colframe=#2,
+    left=12pt, right=10pt, top=6pt, bottom=6pt,
+    before skip=10pt plus 2pt, after skip=10pt plus 2pt,
+    detach title, coltitle=#1, fonttitle=\bfseries,
+    before upper={\tcbtitle\par\vspace{2pt}},
+    overlay unbroken and first={\marqueur{#1}},
+  },
+  marqueur cercle/.code={\gdef\marqueur##1{\fill[##1] (frame.north west) circle (\marqueurTaille);}},
+  marqueur triangle/.code={\gdef\marqueur##1{\fill[##1]
+      ([yshift=\marqueurTaille]frame.north west) --
+      ([xshift=\marqueurTaille, yshift=-0.85\marqueurTaille]frame.north west) --
+      ([xshift=-\marqueurTaille, yshift=-0.85\marqueurTaille]frame.north west) -- cycle;}},
+  marqueur carre/.code={\gdef\marqueur##1{\fill[##1]
+      ([xshift=-0.85\marqueurTaille, yshift=0.85\marqueurTaille]frame.north west) rectangle
+      ([xshift=0.85\marqueurTaille, yshift=-0.85\marqueurTaille]frame.north west);}},
+}
+
+% Titre : « Définition » seul, ou « Définition — Unité Hounsfield »
+\newcommand{\titreencadre}[2]{#1\ifx\relax#2\relax\else\ \textemdash\ #2\fi}
+
+\newtcolorbox{definition}[1][]{marqueur cercle, bauhaus={Slate}{SlatePale}, title={\titreencadre{Définition}{#1}}}
+\newtcolorbox{aretenir}[1][]{marqueur cercle, bauhaus={Slate}{SlatePale}, title={\titreencadre{À retenir}{#1}}}
+\newtcolorbox{attention}[1][]{marqueur triangle, bauhaus={WarmAmber}{AmberPale}, title={\titreencadre{Attention}{#1}}}
+\newtcolorbox{question}[1][]{marqueur carre, bauhaus={Sage}{SagePale}, title={\titreencadre{Question}{#1}}}
+
+% Exercices : \begin{exercice}{Titre}{label}. Numérotés par chapitre dans le cours.
+\ifdefined\chapter
+  \newcounter{exercice}[chapter]
+  \renewcommand{\theexercice}{\thechapter.\arabic{exercice}}
+  \newenvironment{exercice}[2]{%
+    \refstepcounter{exercice}\label{exo:#2}%
+    \begin{tcolorbox}[marqueur carre, bauhaus={Sage}{SagePale}, title={\titreencadre{Exercice \theexercice}{#1}}]}
+    {\end{tcolorbox}}
+\else
+  \newenvironment{exercice}[2]{%
+    \begin{tcolorbox}[marqueur carre, bauhaus={Sage}{SagePale}, title={\titreencadre{Exercice}{#1}}]}
+    {\end{tcolorbox}}
+\fi
+
+% Exemple : paragraphe étiqueté, volontairement sans cadre.
+\newenvironment{exemple}[1][]{%
+  \par\addvspace{6pt plus 2pt}\noindent{\color{Sage}\bfseries\titreencadre{Exemple}{#1}.}\ \ignorespaces}
+  {\par\addvspace{6pt plus 2pt}}
+
+% Formule mise en valeur (fond neutre, coins droits). Une par passage au plus.
+\newcommand{\eqbox}[1]{%
+  \begin{center}
+    \tikz{\node[fill=Pearl, inner sep=10pt, sharp corners] {$\displaystyle #1$};}
+  \end{center}}
+
+% Emplacement réservé pour une figure à produire : \figplaceholder{largeur}{hauteur}{description}
+% La description dit ce que la figure doit montrer, pour que Luis puisse la créer ou la chercher.
+\newcommand{\figplaceholder}[3]{%
+  \begin{center}
+    \tikz{\node[draw=StoneLight, dashed, thick, fill=Pearl, minimum width=#1, minimum height=#2,
+      text width=\dimexpr#1-0.6cm\relax, align=center, font=\footnotesize, text=StoneLight]
+      {Figure à produire\\[2pt]#3};}
+  \end{center}}

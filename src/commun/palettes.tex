@@ -1,0 +1,64 @@
+% Palettes de couleurs. Trois palettes :
+%   RX  : « Ardoise, Sauge & Ambre » (projet cours)
+%   US  : « Indigo, Azur & Corail » (projet cours)
+%   JFR : « Gris & Orange » — ajoutée pour cet exposé : nuances de gris
+%         (anthracite pour la structure, gris pour le second plan, comme une
+%         image de scopie) et un seul accent, l'orange officiel de l'édition
+%         JFR 2026, réservé aux filets et aux chiffres clés. Les bleus
+%         officiels sont définis en réserve pour les figures seulement.
+% Les noms de couleurs sont les mêmes dans les deux : le reste du code ne connaît que ces noms.
+%
+%   Slate / SlateDeep / SlatePale   primaire : titres, barre latérale, encadrés definition et aretenir
+%   Sage / SagePale                 secondaire : sous-titres, encadrés question et exercice
+%   WarmAmber / AmberPale           accent : règles décoratives, encadré attention (jamais pour du texte courant)
+%   Pearl                           surface neutre : fond des formules et du pied de page
+%   Stone / StoneLight              texte principal / texte secondaire (jamais de noir pur)
+%   SoftWhite                       fond de page
+%
+% Usage : \palettecouleurs{RX} ou \palettecouleurs{US}. Peut être rappelé en cours de document
+% (le manuel change de palette à chaque partie).
+
+\newcommand{\palettecouleurs}[1]{%
+  \ifdefstring{\palettecourante}{#1}{}{\gdef\palettecourante{#1}}%
+  \ifdefstring{\palettecourante}{JFR}{%
+    \definecolor{Slate}{HTML}{33363A}%
+    \definecolor{SlateDeep}{HTML}{1F2124}%
+    \definecolor{SlatePale}{HTML}{E9EAEB}%
+    \definecolor{Sage}{HTML}{6B6E72}%
+    \definecolor{SagePale}{HTML}{EEEFF0}%
+    % Couleurs officielles JFR 2026 (diapo « Éléments graphiques & couleurs »
+    % du template PPTX, JFR2026-Template.pptx à la racine) :
+    \definecolor{WarmAmber}{HTML}{FF7E18}%   orange : filets, \highlight, accent
+    \definecolor{AmberPale}{HTML}{FFEBDA}%   teinte pâle de l'orange : fond des \highlight
+    \definecolor{JFRAmber}{HTML}{FFA016}%    ambre : réserve figures
+    \definecolor{JFRAmberLight}{HTML}{FFB649}% ambre clair : réserve figures
+    \definecolor{JFRIndigo}{HTML}{212687}%   indigo : réserve figures
+    \definecolor{JFRBlue}{HTML}{2849EA}%     bleu : réserve figures
+    \definecolor{JFRBluePale}{HTML}{C9D1FA}% bleu pâle : réserve figures
+  }{%
+  \ifdefstring{\palettecourante}{US}{%
+    \definecolor{Slate}{HTML}{2E4A72}%
+    \definecolor{SlateDeep}{HTML}{1C3352}%
+    \definecolor{SlatePale}{HTML}{E3EBF3}%
+    \definecolor{Sage}{HTML}{4A90A4}%
+    \definecolor{SagePale}{HTML}{E6F1F5}%
+    \definecolor{WarmAmber}{HTML}{CF6B4E}%
+    \definecolor{AmberPale}{HTML}{FCEEE9}%
+  }{%
+    \definecolor{Slate}{HTML}{3D6B7C}%
+    \definecolor{SlateDeep}{HTML}{2A4F5C}%
+    \definecolor{SlatePale}{HTML}{E8F0F3}%
+    \definecolor{Sage}{HTML}{7A9E8E}%
+    \definecolor{SagePale}{HTML}{EDF4F0}%
+    \definecolor{WarmAmber}{HTML}{D4983C}%
+    \definecolor{AmberPale}{HTML}{FDF3E4}%
+  }}%
+  \definecolor{Pearl}{HTML}{F4F2EF}%
+  \definecolor{Stone}{HTML}{363330}%
+  \definecolor{StoneLight}{HTML}{A9A5A0}%
+  \definecolor{SoftWhite}{HTML}{FAFAF8}%
+}
+\providecommand{\palettecourante}{RX}
+% Argument développé avant l'appel : sinon \ifdefstring compare le nom de la
+% macro (« \palettecourante ») à « JFR »/« US » et retombe toujours sur RX.
+\expandafter\palettecouleurs\expandafter{\palettecourante}

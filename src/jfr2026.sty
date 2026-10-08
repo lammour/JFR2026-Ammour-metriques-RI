@@ -1,0 +1,273 @@
+% ============================================================================
+% jfr2026.sty — extensions propres à l'exposé, chargé après le préambule commun.
+%
+%   \src{cle1,cle2}     sources de la diapo, en petit gris en bas du contenu :
+%                       « Konst et al. 2021, J. Appl. Clin. Med. Phys. »
+%   \refslide{cles}     diapo « Références » avec les seules entrées listées
+%
+% Les abréviations de revues sont injectées par biber (sourcemap) : le .bib
+% reste intact. Compléter la liste si une nouvelle revue apparaît.
+% ============================================================================
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jfr2026}[2026/10/01 JFR 2026 project extensions]
+
+\RequirePackage{array}
+\RequirePackage{xstring}
+
+% \highlight : aplat orange officiel JFR, texte blanc gras (seul accent de la
+% palette) : le chiffre ou mot clé ressort du gris. Remplace la version pâle
+% du préambule. Un par diapo, deux au plus. Variante retenue parmi quatre
+% (build/test_highlight_orange.png) ; l'alternative aimée de Luis est texte
+% orange sur AmberPale. Le \strut fixe la hauteur du cartouche quel que soit
+% le mot (avec ou sans jambages), sinon elle varie d'un mot à l'autre.
+\renewcommand{\highlight}[1]{\tikz[baseline=(h.base)]{\node (h) [fill=WarmAmber, text=SoftWhite, rounded corners=3pt, inner xsep=5pt, inner ysep=2pt, font=\small\bfseries] {\strut#1};}}  % baseline=(h.base) : le texte du cartouche sur la ligne de base du texte courant
+
+% Les champs note du .bib sont des fiches de lecture : jamais imprimés.
+\AtEveryBibitem{\clearfield{note}\clearfield{doi}\clearfield{url}\clearfield{isbn}}
+\AtEveryCitekey{\clearfield{note}}
+\renewbibmacro{in:}{}
+\ExecuteBibliographyOptions{uniquelist=false}   % « Siewerdsen et al. », pas « Siewerdsen, Cunningham et al. »
+
+% ----------------------------------------------------------------------------
+% TITRES DE DIAPOS : le Slate du modèle cours est quasi identique au Stone du
+% texte courant. Choix de Luis (7 oct. 2026) parmi six essais : titre en
+% SlateDeep précédé d'une fine barre verticale orange, de la hauteur de la
+% ligne. Redéfinit le gabarit « frametitle » du modèle (sous-titre conservé).
+% ----------------------------------------------------------------------------
+\setbeamercolor{frametitle}{fg=SlateDeep, bg=}
+\defbeamertemplate*{frametitle}{jfr}{
+  \vspace{0.02cm}
+  \hspace*{-0.09cm}% aligne la barre sur le bord gauche du texte courant
+  \begin{minipage}[t]{0.92\textwidth}
+    {\color{WarmAmber}\rule[-0.25ex]{3pt}{1.1em}}\hspace{0.2cm}%
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle%
+    \ifx\insertframesubtitle\@empty\else
+      \\[1pt]{\lightfont\small\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+    \fi
+  \end{minipage}
+  \vspace{-0.05cm}}
+
+% ----------------------------------------------------------------------------
+% ABRÉVIATIONS DE REVUES (champ brut « journal » → shortjournal)
+% Les espaces s'écrivent \s et l'esperluette « . » : keyval mange les blancs,
+% le XML du .bcf refuse « & ».
+% ----------------------------------------------------------------------------
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{\step[fieldsource=journal, match=\regexp{^Medical\sPhysics$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Med. Phys.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Physica\sMedica$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Phys. Med.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Journal\sof\sApplied\sClinical\sMedical\sPhysics$}, final]
+         \step[fieldset=shortjournal, fieldvalue={J. Appl. Clin. Med. Phys.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^(The\s)?British\sJournal\sof\sRadiology$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Br. J. Radiol.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Radiation\sProtection\sDosimetry$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Radiat. Prot. Dosim.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Physics\sin\sMedicine\s.*\sBiology$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Phys. Med. Biol.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Proceedings\sof\sthe\sNational\sAcademy\sof\sSciences$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Proc. Natl. Acad. Sci.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Pediatric\sRadiology$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Pediatr. Radiol.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Nature\sMedicine$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Nat. Med.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Journal\sof\sthe\sSociety\sfor\sCardiovascular\sAngiography\s.*\sInterventions$}, final]
+         \step[fieldset=shortjournal, fieldvalue={J. Soc. Cardiovasc. Angiogr. Interv.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Journal\sof\sthe\sOptical\sSociety\sof\sAmerica\sA$}, final]
+         \step[fieldset=shortjournal, fieldvalue={J. Opt. Soc. Am. A}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Journal\sof\sMedical\sImaging$}, final]
+         \step[fieldset=shortjournal, fieldvalue={J. Med. Imaging}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Journal\sof\sImaging\sInformatics\sin\sMedicine$}, final]
+         \step[fieldset=shortjournal, fieldvalue={J. Imaging Inform. Med.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^IEEE\sTransactions\son\sInstrumentation\sand\sMeasurement$}, final]
+         \step[fieldset=shortjournal, fieldvalue={IEEE Trans. Instrum. Meas.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Catheterization\sand\sCardiovascular\sInterventions$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Catheter. Cardiovasc. Interv.}]}
+    \map{\step[fieldsource=journal, match=\regexp{^Academic\sRadiology$}, final]
+         \step[fieldset=shortjournal, fieldvalue={Acad. Radiol.}]}
+    % Organismes : sigle en citation (shortauthor prime sur author dans labelname)
+    \map{\step[fieldsource=entrykey, match=\regexp{^nema2000$}, final]
+         \step[fieldset=shortauthor, fieldvalue={{NEMA}}]}
+    \map{\step[fieldsource=entrykey, match=\regexp{^iec20(15|08)$}, final]
+         \step[fieldset=shortauthor, fieldvalue={{IEC}}]}
+    \map{\step[fieldsource=entrykey, match=\regexp{^icru1996$}, final]
+         \step[fieldset=shortauthor, fieldvalue={{ICRU}}]}
+    \map{\step[fieldsource=entrykey, match=\regexp{^viry2023$}, final]
+         \step[fieldset=shortjournal, fieldvalue={JS SFPM}]}
+    \map{\step[fieldsource=entrykey, match=\regexp{^ansm2016$}, final]
+         \step[fieldset=shortauthor, fieldvalue={{ANSM}}]}
+  }
+}
+
+% ----------------------------------------------------------------------------
+% SOURCES EN PIED DE DIAPO
+% ----------------------------------------------------------------------------
+% Rendu d'une clé : « Konst et al. 2021, J. Appl. Clin. Med. Phys. »
+% Support : shortjournal > journaltitle > shorttitle > (rien).
+\DeclareFieldFormat{srcvenue}{#1}
+\DeclareCiteCommand{\srccite}
+  {\frenchspacing}
+  {\printnames{labelname}\addspace\printfield{year}%
+   \iffieldundef{shortjournal}
+     {\iffieldundef{journaltitle}
+        {\iffieldundef{shorttitle}{}{\addcomma\space\printfield[srcvenue]{shorttitle}}}
+        {\addcomma\space\printfield[srcvenue]{journaltitle}}}
+     {\addcomma\space\printfield[srcvenue]{shortjournal}}}
+  {\addsemicolon\space}
+  {}
+
+% \src{cles} : à placer en fin de frame. Ligne de sources en petit gris,
+% poussée en bas de la zone de texte par \vfill (le pied de page reste
+% réservé à auteurs · institut · JFR 2026 · numéro). Cinq sources au plus.
+% Appels de sources numérotés, comme des notes de bas de page :
+% \srcref{cle1,cle2} dans le texte imprime un petit chiffre en exposant, numéroté
+% dans l'ordre d'apparition sur la diapo ; \src{cles} reprend les mêmes
+% numéros devant chaque source. Une clé de \src jamais appelée dans le texte
+% prend le numéro suivant. La liste est remise à zéro par \src.
+\ExplSyntaxOn
+\seq_new:N \g__jfr_src_seq
+\cs_new_protected:Npn \__jfr_src_add:n #1
+  { \seq_if_in:NnF \g__jfr_src_seq {#1} { \seq_gput_right:Nn \g__jfr_src_seq {#1} } }
+\cs_new:Npn \__jfr_src_number:n #1
+  {
+    \seq_map_indexed_inline:Nn \g__jfr_src_seq
+      { \str_if_eq:nnT {##2} {#1} { ##1 \seq_map_break: } }
+  }
+\NewDocumentCommand { \srcref } { m }
+  {
+    \clist_map_inline:nn {#1} { \__jfr_src_add:n {##1} }
+    \seq_set_from_clist:Nn \l_tmpa_seq {#1}
+    \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \__jfr_src_number:n {##1} }
+    \textsuperscript { \color{Sage} \seq_use:Nn \l_tmpb_seq {,} }
+  }
+\NewDocumentCommand { \src } { m }
+  {
+    \clist_map_inline:nn {#1} { \__jfr_src_add:n {##1} }
+    \par \vfill
+    \noindent
+    {
+      \raggedright   % toujours à gauche, même après un \centering de frame
+      \tiny \color{StoneLight}
+      \seq_map_indexed_inline:Nn \g__jfr_src_seq
+        {
+          \int_compare:nT { ##1 > 1 } { ;~ }
+          \textsuperscript{##1} \, \srccite{##2}
+        }
+      \par
+    }
+    \vspace*{-0.15cm}   % rapproche la ligne des sources du bandeau du bas
+    \seq_gclear:N \g__jfr_src_seq
+  }
+\ExplSyntaxOff
+
+% Pied de page : « auteurs (institut) » à gauche, date courte (JFR 2026) au
+% centre, numéro à droite. Copie du modèle cours, titre court remplacé par
+% \insertshortdate.
+\defbeamertemplate*{footline}{jfr}{
+  \hbox to \paperwidth{\rule{0pt}{0.6cm}\hfill}%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[Pearl] (current page.south west) rectangle ([yshift=0.45cm]current page.south east);
+    \node[anchor=west, inner sep=0pt] at ([xshift=0.5cm, yshift=0.22cm]current page.south west)
+      {\usebeamerfont{footline}\color{StoneLight}\insertshortauthor{} (\insertshortinstitute)};
+    \node[anchor=center, inner sep=0pt] at ([yshift=0.22cm]current page.south)
+      {\usebeamerfont{footline}\color{StoneLight}\insertshortdate};
+    \node[anchor=east, inner sep=0pt] at ([xshift=-0.5cm, yshift=0.22cm]current page.south east)
+      {\usebeamerfont{footline}\color{Sage}\bfseries\insertframenumber\,/\,\inserttotalframenumber};
+  \end{tikzpicture}}
+
+% ----------------------------------------------------------------------------
+% PAGES DE TITRE ET DE FIN SANS MOTIF
+% ----------------------------------------------------------------------------
+% Le modèle cours dessine une sphère (titre) et un cube (fin) en projection
+% radiographique dans le coin supérieur droit. Pas adaptés ici : vidés.
+% Pour mettre un motif propre à l'exposé (vaisseau en scopie, fantôme…),
+% redéfinir \formesphere et \formecube en TikZ, en coordonnées
+% [x=\paperwidth, y=\paperheight], nuances de gris uniquement.
+\renewcommand{\formesphere}{}
+\renewcommand{\formecube}{}
+
+% Page de titre avec le logo du CHU à droite, aligné sur le bloc auteurs /
+% institution (pas sur la ligne du congrès), petit (fichier recadré au
+% contenu, l'original a des marges). \logotitre vide : pas de logo.
+\newcommand{\logotitre}{CHUNantes_logo_recadre.png}
+\newlength{\logotitrelargeur}\setlength{\logotitrelargeur}{1.7cm}
+% Pastille « JFR 2026 » extraite du modèle officiel (JFR2026-Template.pptx,
+% ppt/media/image3.png, 201 px, lettres blanches passées à l'indigo pour fond
+% clair) : sous le logo CHU, alignée à gauche sur lui, en face de la ligne du
+% congrès, de la même hauteur que le logo CHU (1,7 cm × 1797/2953 ≈ 1,03 cm).
+\newcommand{\logojfr}{JFR2026_logo.png}
+\newlength{\logojfrhauteur}\setlength{\logojfrhauteur}{1.03cm}
+\renewcommand{\pagetitre}{{%
+  \setbeamertemplate{footline}{}\fondbarre{\formesphere}
+  \begin{frame}[plain]
+    \titlepage
+    \ifdefempty{\logotitre}{}{%
+      \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=south east, inner sep=0pt]
+          at ([xshift=-0.8cm, yshift=1.5cm]current page.south east)
+          {\includegraphics[width=\logotitrelargeur]{\logotitre}};
+        \ifdefempty{\logojfr}{}{%
+          \node[anchor=north west, inner sep=0pt]
+            at ([xshift=-0.8cm-\logotitrelargeur, yshift=1.5cm-0.1cm]current page.south east)
+            {\includegraphics[height=\logojfrhauteur]{\logojfr}};}
+      \end{tikzpicture}}
+  \end{frame}}}
+
+% Page de fin : \pagefin[image]{ligne de contact}
+% Fond : image plein cadre (frame fixe de la boucle de scopie du bruit, à
+% remplacer dans le PPTX par la vidéo MP4 en boucle ; la frame fixe sert de
+% secours). Panneau anthracite à gauche (40 % de la largeur, prolonge la barre
+% latérale) qui porte le texte en blanc : la zone vidéo reste vierge.
+% Tant que la vraie frame manque : figures/placeholder_boucle_bruit.png
+% (bruit synthétique, étiqueté comme emplacement réservé).
+\newcommand{\pagefin@panneau}{0.40}
+\renewcommand{\pagefin}[2][]{{%
+  \setbeamertemplate{footline}{}%
+  \setbeamertemplate{background canvas}{%
+    \begin{tikzpicture}[x=\paperwidth, y=\paperheight]
+      \useasboundingbox (0,0) rectangle (1,1);
+      \fill[SoftWhite] (0,0) rectangle (1,1);
+      \ifstrempty{#1}{}{%
+        \begin{scope}
+          \clip (0,0) rectangle (1,1);
+          \node[anchor=center, inner sep=0pt] at (0.5,0.5)
+            {\includegraphics[width=\paperwidth]{#1}};
+        \end{scope}
+        \IfSubStr{#1}{placeholder}{%
+          \node[anchor=south east, inner sep=0pt, text=SoftWhite, font=\tiny, align=right, text width=0.5\paperwidth]
+            at (0.97,0.05) {emplacement réservé : boucle de scopie du bruit (disque Cu sur PMMA, basse dose, cadence réelle), vidéo MP4 posée en fond dans le PPTX, cette image fixe en secours};
+        }{}%
+      }%
+      \fill[Slate] (0,0) rectangle (\pagefin@panneau,1);
+    \end{tikzpicture}}%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=west, inner sep=0pt, text width=0.32\paperwidth, align=left]
+        at ([xshift=0.06\paperwidth]current page.west) {%
+          \raggedright\hyphenpenalty=10000
+          {\color{SoftWhite}\LARGE\bfseries Merci de votre attention\par}
+          \vspace{0.35cm}
+          {\lightfont\color{StoneLight}\small #2\par}
+          \vspace{0.6cm}{\color{WarmAmber}\rule{2.2cm}{1.5pt}}};
+    \end{tikzpicture}
+  \end{frame}}}
+
+% ----------------------------------------------------------------------------
+% DIAPO DE RÉFÉRENCES
+% ----------------------------------------------------------------------------
+\DeclareBibliographyCategory{refslide}
+\setbeamertemplate{bibliography item}{}
+\setlength{\bibitemsep}{0.3em}
+\setlength{\bibhang}{0.8em}
+
+\newcommand{\refslide}[1]{%
+  \addtocategory{refslide}{#1}%
+  \nocite{#1}%
+  \begin{frame}[allowframebreaks]{Références}
+    \renewcommand*{\bibfont}{\fontsize{7.5}{9}\selectfont}  % 7,5 pt sur 16 cm = 15,9 pt projetés, au-dessus du plancher de 12 pt
+    \printbibliography[category=refslide,heading=none]
+  \end{frame}}
+
+\endinput

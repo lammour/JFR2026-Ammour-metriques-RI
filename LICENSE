@@ -1,0 +1,12 @@
+Diapositives, texte, sources LaTeX et modèle de présentation :
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/legalcode.fr
+
+Attribution : L. Ammour, H. Desal, CHU de Nantes, « Évaluation objective de la
+qualité d'image en radiologie interventionnelle : quelles métriques ? », JFR 2026.
+
+Exclus de cette licence : les polices (SIL Open Font License, voir
+src/commun/polices/LISEZMOI.md), les figures reproduites de publications
+(figures/nema_roue_lag.png, disque_monnin.png, dqe_friedman.png,
+dqe_friedman_t.png) et les logos (figures/CHUNantes_*.png, JFR2026_logo.png),
+qui restent soumis aux droits de leurs titulaires.

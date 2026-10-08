@@ -1,0 +1,261 @@
+% ============================================================================
+%  PRÉAMBULE BEAMER — copié du projet « Cours université physique médicale »
+%  (commun/preambule-presentation.tex), polices versionnées dans
+%  commun/polices/, palette RX. Modifications locales : chemin du .bib,
+%  macros.tex non chargé (il renomme MTF en FTM, l'exposé garde les sigles
+%  anglais).
+%  Le document a déjà déclaré \documentclass[aspectratio=169, 11pt]{beamer}.
+% ============================================================================
+
+\usepackage{etoolbox}
+\usepackage{xcolor}
+
+% --- Polices (fontspec, chemin relatif au dépôt) ---
+\usepackage[no-math]{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+\setsansfont{Poppins}[Extension=.ttf,
+  UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]
+\setmainfont{Poppins}[Extension=.ttf,
+  UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]
+\newfontfamily\lightfont{Poppins-Light}[Extension=.ttf]
+\newfontfamily\mediumfont{Poppins-Medium}[Extension=.ttf]
+
+% --- Mathématiques : chiffres et lettres latines en Poppins (mathastext),
+%     grec en Inter, symboles en Noto Sans Math ---
+\usepackage{mathtools}
+\usepackage[italic]{mathastext}
+\newfontfamily\intermath{Inter}[Extension=.otf,
+  UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]
+\newfontfamily\notosansmath{NotoSansMath-Regular}[Extension=.ttf]
+\makeatletter
+{\intermath\xdef\InterFamily{\f@family}}
+{\notosansmath\xdef\NotoMathFamily{\f@family}}
+\makeatother
+\DeclareSymbolFont{greeklower}{TU}{\InterFamily}{m}{it}
+\SetSymbolFont{greeklower}{bold}{TU}{\InterFamily}{b}{it}
+\DeclareSymbolFont{greekupper}{TU}{\InterFamily}{m}{n}
+\SetSymbolFont{greekupper}{bold}{TU}{\InterFamily}{b}{n}
+\DeclareSymbolFont{mathsans}{TU}{\NotoMathFamily}{m}{n}
+% Grec minuscule (italique, classe 7)
+\Umathchardef\alpha=7 \symgreeklower "03B1 \Umathchardef\beta=7 \symgreeklower "03B2
+\Umathchardef\gamma=7 \symgreeklower "03B3 \Umathchardef\delta=7 \symgreeklower "03B4
+\Umathchardef\epsilon=7 \symgreeklower "03F5 \Umathchardef\varepsilon=7 \symgreeklower "03B5
+\Umathchardef\zeta=7 \symgreeklower "03B6 \Umathchardef\eta=7 \symgreeklower "03B7
+\Umathchardef\theta=7 \symgreeklower "03B8 \Umathchardef\vartheta=7 \symgreeklower "03D1
+\Umathchardef\iota=7 \symgreeklower "03B9 \Umathchardef\kappa=7 \symgreeklower "03BA
+\Umathchardef\lambda=7 \symgreeklower "03BB \Umathchardef\mu=7 \symgreeklower "03BC
+\Umathchardef\nu=7 \symgreeklower "03BD \Umathchardef\xi=7 \symgreeklower "03BE
+\Umathchardef\pi=7 \symgreeklower "03C0 \Umathchardef\varpi=7 \symgreeklower "03D6
+\Umathchardef\rho=7 \symgreeklower "03C1 \Umathchardef\varrho=7 \symgreeklower "03F1
+\Umathchardef\sigma=7 \symgreeklower "03C3 \Umathchardef\varsigma=7 \symgreeklower "03C2
+\Umathchardef\tau=7 \symgreeklower "03C4 \Umathchardef\upsilon=7 \symgreeklower "03C5
+\Umathchardef\phi=7 \symgreeklower "03D5 \Umathchardef\varphi=7 \symgreeklower "03C6
+\Umathchardef\chi=7 \symgreeklower "03C7 \Umathchardef\psi=7 \symgreeklower "03C8
+\Umathchardef\omega=7 \symgreeklower "03C9
+% Grec majuscule (droit, classe 0)
+\Umathchardef\Gamma=0 \symgreekupper "0393 \Umathchardef\Delta=0 \symgreekupper "0394
+\Umathchardef\Theta=0 \symgreekupper "0398 \Umathchardef\Lambda=0 \symgreekupper "039B
+\Umathchardef\Xi=0 \symgreekupper "039E \Umathchardef\Pi=0 \symgreekupper "03A0
+\Umathchardef\Sigma=0 \symgreekupper "03A3 \Umathchardef\Upsilon=0 \symgreekupper "03A5
+\Umathchardef\Phi=0 \symgreekupper "03A6 \Umathchardef\Psi=0 \symgreekupper "03A8
+\Umathchardef\Omega=0 \symgreekupper "03A9
+% Relations (classe 3), opérateurs binaires (2), ordinaires (0)
+\Umathchardef\approx=3 \symmathsans "2248 \Umathchardef\sim=3 \symmathsans "223C
+\Umathchardef\simeq=3 \symmathsans "2243 \Umathchardef\propto=3 \symmathsans "221D
+\Umathchardef\leq=3 \symmathsans "2264 \Umathchardef\geq=3 \symmathsans "2265
+\Umathchardef\neq=3 \symmathsans "2260 \Umathchardef\equiv=3 \symmathsans "2261
+\Umathchardef\ll=3 \symmathsans "226A \Umathchardef\gg=3 \symmathsans "226B
+\Umathchardef\rightarrow=3 \symmathsans "2192 \Umathchardef\leftarrow=3 \symmathsans "2190
+\Umathchardef\Rightarrow=3 \symmathsans "21D2 \Umathchardef\Leftarrow=3 \symmathsans "21D0
+\Umathchardef\leftrightarrow=3 \symmathsans "2194
+\Umathchardef\times=2 \symmathsans "00D7 \Umathchardef\pm=2 \symmathsans "00B1
+\Umathchardef\mp=2 \symmathsans "2213 \Umathchardef\cdot=2 \symmathsans "22C5
+\Umathchardef\circ=2 \symmathsans "2218
+\Umathchardef\infty=0 \symmathsans "221E \Umathchardef\partial=0 \symmathsans "2202
+\let\le\leq \let\ge\geq \let\ne\neq \let\to\rightarrow \let\gets\leftarrow
+
+% --- Langue, unités, graphiques ---
+\usepackage[french]{babel}
+\usepackage[autostyle=true, french=guillemets]{csquotes}
+\usepackage[locale=FR, per-mode=symbol, separate-uncertainty=true, range-phrase={ à }, range-units=single]{siunitx}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{tikz, pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{calc, positioning, arrows.meta, shapes.geometric, decorations.pathreplacing, decorations.pathmorphing, backgrounds}
+\usepackage[most]{tcolorbox}
+\usepackage{appendixnumberbeamer}
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, giveninits=true, uniquename=init]{biblatex}
+\addbibresource{../references.bib}
+\usepackage{hyperref}
+\hypersetup{colorlinks=false, pdfborderstyle={/S/U/W 0}}
+
+\input{\commun/palettes}
+\input{\commun/boites}
+
+% ============================================================================
+%  RÉGLAGES BEAMER
+% ============================================================================
+\usetheme{default}
+\usecolortheme{default}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{frametitle continuation}{}
+\setbeamertemplate{blocks}[default]
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\setbeamerfont{caption}{size=\scriptsize}
+\setbeamercolor{caption}{fg=StoneLight}
+
+\setbeamercolor{normal text}{fg=Stone, bg=SoftWhite}
+\setbeamercolor{structure}{fg=Slate}
+\setbeamercolor{alerted text}{fg=WarmAmber}
+\setbeamercolor{example text}{fg=Sage}
+\setbeamercolor{title}{fg=Slate}
+\setbeamercolor{subtitle}{fg=Sage}
+\setbeamercolor{author}{fg=Stone}
+\setbeamercolor{institute}{fg=Sage}
+\setbeamercolor{date}{fg=StoneLight}
+\setbeamercolor{frametitle}{fg=Slate, bg=}
+\setbeamercolor{framesubtitle}{fg=Sage}
+\setbeamercolor{itemize item}{fg=Slate}
+\setbeamercolor{itemize subitem}{fg=Sage}
+\setbeamercolor{enumerate item}{fg=Slate}
+\setbeamercolor{section in toc}{fg=Stone}
+\setbeamercolor{bibliography entry author}{fg=Stone}
+\setbeamercolor{bibliography entry title}{fg=Stone}
+\setbeamercolor{bibliography entry note}{fg=StoneLight}
+
+\setbeamerfont{title}{size=\Large, series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize}
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{footline}{size=\tiny}
+
+% Puces : petits carrés arrondis ; numéros : badges
+\setbeamertemplate{itemize item}{\tikz[baseline=-0.6ex]\fill[Slate, rounded corners=1pt] (0,0) rectangle (0.32em,0.32em);}
+\setbeamertemplate{itemize subitem}{\tikz[baseline=-0.5ex]\draw[Sage, thick, rounded corners=0.5pt] (0,0) rectangle (0.26em,0.26em);}
+\setbeamertemplate{enumerate items}{\tikz[baseline=-0.7ex]{\node[fill=Slate, text=SoftWhite, rounded corners=2.5pt,
+  inner sep=2pt, minimum width=1.3em, minimum height=1.3em, font=\footnotesize\bfseries] {\insertenumlabel};}}
+
+% --- Page de titre ---
+\defbeamertemplate*{title page}{medical}{
+  \vspace{1.2cm}
+  \hspace{0.8cm}%
+  \begin{minipage}[t]{0.78\textwidth}
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+    \vspace{0.25cm}
+    {\lightfont\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \vspace{0.8cm}
+    {\color{WarmAmber}\rule{2.2cm}{1.5pt}\par}
+    \vspace{0.6cm}
+    {\mediumfont\usebeamercolor[fg]{author}\insertauthor\par}
+    \vspace{0.1cm}
+    {\lightfont\small\usebeamercolor[fg]{institute}\insertinstitute\par}
+    \vspace{0.25cm}
+    {\lightfont\small\usebeamercolor[fg]{date}\insertdate\par}
+  \end{minipage}}
+
+% --- Titre de diapositive ---
+\makeatletter
+\defbeamertemplate*{frametitle}{medical}{
+  \vspace{0.02cm}
+  \hspace{0.15cm}%
+  \begin{minipage}[t]{0.92\textwidth}
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle%
+    \ifx\insertframesubtitle\@empty\else
+      \\[1pt]{\lightfont\small\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+    \fi
+  \end{minipage}
+  \vspace{-0.05cm}}
+\makeatother
+
+% --- Pied de page (réserve sa hauteur, puis se dessine en surimpression) ---
+\defbeamertemplate*{footline}{medical}{
+  \hbox to \paperwidth{\rule{0pt}{0.6cm}\hfill}%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[Pearl] (current page.south west) rectangle ([yshift=0.45cm]current page.south east);
+    \node[anchor=west, inner sep=0pt] at ([xshift=0.5cm, yshift=0.22cm]current page.south west)
+      {\usebeamerfont{footline}\color{StoneLight}\insertshortauthor{} \textbar{} \insertshortinstitute};
+    \node[anchor=center, inner sep=0pt] at ([yshift=0.22cm]current page.south)
+      {\usebeamerfont{footline}\color{StoneLight}\insertshorttitle};
+    \node[anchor=east, inner sep=0pt] at ([xshift=-0.5cm, yshift=0.22cm]current page.south east)
+      {\usebeamerfont{footline}\color{Sage}\bfseries\insertframenumber\,/\,\inserttotalframenumber};
+  \end{tikzpicture}}
+
+% --- Fond des pages spéciales : barre latérale + forme optionnelle ---
+\newcommand{\fondbarre}[1]{%
+  \setbeamertemplate{background canvas}{%
+    \begin{tikzpicture}[x=\paperwidth, y=\paperheight]
+      \useasboundingbox (0,0) rectangle (1,1);
+      \fill[SoftWhite] (0,0) rectangle (1,1);
+      \fill[Slate] (0,0) rectangle (0.043,1);
+      #1
+    \end{tikzpicture}}}
+
+% Projection radiographique d'une sphère (page de titre)
+\newcommand{\formesphere}{%
+  \coordinate (sC) at (0.86,0.77);
+  \foreach \sc/\op in {1.0/0.06, 0.82/0.06, 0.64/0.07, 0.46/0.08, 0.28/0.1, 0.12/0.12} {
+    \pgfmathsetmacro{\rr}{3.2*\sc}
+    \fill[Slate, opacity=\op] (sC) circle (\rr cm);}}
+
+% Projection radiographique d'un cube vu selon sa diagonale (page de fin)
+\newcommand{\formecube}{%
+  \coordinate (hC) at (0.89,0.72);
+  \pgfmathsetmacro{\cubeS}{2.2}\pgfmathsetmacro{\cA}{cos(30)}\pgfmathsetmacro{\sA}{sin(30)}%
+  \pgfmathsetmacro{\cB}{cos(45)}\pgfmathsetmacro{\sB}{sin(45)}%
+  \pgfmathsetmacro{\aV}{\cubeS*(\cA+\sA)}\pgfmathsetmacro{\bV}{\cubeS*(\cA-\sA)}%
+  \pgfmathsetmacro{\uV}{\bV*\cB}\pgfmathsetmacro{\vV}{\aV*\cB}\pgfmathsetmacro{\hV}{\cubeS*\sB}%
+  \foreach \sc/\op in {1.0/0.06, 0.84/0.06, 0.68/0.07, 0.52/0.08, 0.36/0.1, 0.2/0.12} {
+    \fill[Slate, opacity=\op]
+      ([shift={(\sc*\aV cm, \sc*(-\uV+\hV) cm)}]hC) -- ([shift={(\sc*\bV cm, \sc*(\vV+\hV) cm)}]hC) --
+      ([shift={(-\sc*\aV cm, \sc*(\uV+\hV) cm)}]hC) -- ([shift={(-\sc*\aV cm, \sc*(\uV-\hV) cm)}]hC) --
+      ([shift={(-\sc*\bV cm, \sc*(-\vV-\hV) cm)}]hC) -- ([shift={(\sc*\aV cm, \sc*(-\uV-\hV) cm)}]hC) -- cycle;}}
+
+% \pagetitre et \pagefin : à appeler dans le document
+\newcommand{\pagetitre}{{%
+  \setbeamertemplate{footline}{}\fondbarre{\formesphere}
+  \begin{frame}[plain]\titlepage\end{frame}}}
+\newcommand{\pagefin}[1]{{%   #1 : ligne de contact
+  \setbeamertemplate{footline}{}\fondbarre{\formecube}
+  \begin{frame}[plain]
+    \vspace{2.5cm}\hspace{0.8cm}%
+    \begin{minipage}{0.78\textwidth}
+      {\color{Slate}\LARGE\bfseries Merci de votre attention}\\[0.35cm]
+      {\lightfont\color{Sage}\normalsize #1}\\[0.15cm]
+      \vspace{0.6cm}{\color{WarmAmber}\rule{2.2cm}{1.5pt}}
+    \end{minipage}
+  \end{frame}}}
+
+% --- Page de section automatique, avec grand numéro ---
+\AtBeginSection[]{{%
+  \setbeamertemplate{footline}{}
+  \fondbarre{\node[anchor=north east, font=\fontsize{100}{100}\selectfont\bfseries, text=SlatePale] at (0.93,0.95) {\thesection};}
+  \begin{frame}[plain]
+    \hypertarget{section\thesection}{}
+    \vspace{2.5cm}\hspace{1.1cm}%
+    \begin{minipage}{0.75\textwidth}\raggedright
+      {\lightfont\color{Sage}\large Partie \thesection}\\[0.35cm]
+      {\color{Slate}\LARGE\bfseries\insertsectionhead}\\[0.3cm]
+      {\color{WarmAmber}\rule{1.8cm}{1.5pt}}
+    \end{minipage}
+  \end{frame}}}
+
+% --- Sommaire : entrées cliquables à badges ---
+\setbeamertemplate{section in toc}{%
+  \leavevmode
+  \hyperlink{section\inserttocsectionnumber}{%
+    \tikz[baseline=-0.7ex]{\node[fill=Slate, text=SoftWhite, rounded corners=3pt, inner sep=3pt,
+      minimum width=1.5em, minimum height=1.5em, font=\small\bfseries] {\inserttocsectionnumber};}%
+    \hspace{0.4em}{\mediumfont\color{Stone}\inserttocsection}}\par
+  \vspace{0.3em}}
+
+% --- Aides de mise en page ---
+\newcommand{\twocols}[2]{\begin{columns}[T]\begin{column}{0.47\textwidth}#1\end{column}\begin{column}{0.47\textwidth}#2\end{column}\end{columns}}
+\newcommand{\highlight}[1]{\tikz[baseline=-0.7ex]{\node[fill=SlatePale, text=SlateDeep, rounded corners=3pt, inner xsep=5pt, inner ysep=2pt, font=\small] {#1};}}
+% Source d'une image, en petit sous la figure
+\newcommand{\sourceimage}[1]{\par{\tiny\color{StoneLight}#1\par}}
